@@ -9,6 +9,8 @@ public class MainActivity extends AppCompatActivity {
 
     Button ON;
     Button OFF;
+    byte clicked = 0;
+    byte clicked2 = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,13 +24,31 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //turn on cyberplug
-                ON.setText("turned on cyberplug yes");
+                switch (clicked) {
+                    case 1:
+                        ON.setText("aha");
+                        clicked = 0;
+                        break;
+                    case 0:
+                        ON.setText("mhm");
+                        clicked = 1;
+                        break;
+                }
             }
         });
         OFF.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                OFF.setText("turned off bitch nigga no cyberplug");
+                switch (clicked2) {
+                    case 1:
+                        OFF.setText("yush");
+                        clicked2 = 0;
+                        break;
+                    case 0:
+                        OFF.setText("nops");
+                        clicked2 = 1;
+                        break;
+                }
             }
         });
     }
