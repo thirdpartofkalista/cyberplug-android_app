@@ -5,12 +5,22 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+
 public class MainActivity extends AppCompatActivity {
 
     Button ON;
     Button OFF;
-    byte clicked = 0;
-    byte clicked2 = 0;
+
+    String status;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,33 +34,42 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //turn on cyberplug
-                switch (clicked) {
-                    case 1:
-                        ON.setText("aha");
-                        clicked = 0;
-                        break;
-                    case 0:
-                        ON.setText("mhm");
-                        clicked = 1;
-                        break;
+
+                try{
+                    sendRequest(ON.getText().toString());
+                }
+                catch(Exception ex){
+
                 }
             }
         });
         OFF.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switch (clicked2) {
-                    case 1:
-                        OFF.setText("yush");
-                        clicked2 = 0;
-                        break;
-                    case 0:
-                        OFF.setText("nops");
-                        clicked2 = 1;
-                        break;
+
+                try{
+                    sendRequest(OFF.getText().toString());
+                }
+                catch(Exception ex){
+
                 }
             }
         });
+    }
+
+    public void sendRequest(String x) throws UnsupportedEncodingException, MalformedURLException {
+        String data = URLEncoder.encode("status", "UTF-8") + "=" + URLEncoder.encode(x, "UTF-8");
+        try {
+            URL url = new URL("https://www.google.com/upstream");
+            URLConnection conn = url.openConnection();
+            conn.setDoOutput(true);
+            OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+            wr.write( data );
+            wr.flush();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 
