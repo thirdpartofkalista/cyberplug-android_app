@@ -17,6 +17,15 @@ public class HttpRequestsHandler {
 //    The URL of the remote server
     private URL serverURL;
 
+//    The thread that will be used for networking
+    private Thread networkingThread;
+
+//    A string that contains the response message from the last operation
+    private String responseMessage;
+
+//    An int that contains the response code from the last operation
+    private int responseCode;
+
 //    The class constructor requires the activity's context in order to retrieve
 //    the URL from a string resource
     public HttpRequestsHandler(Context context) {
@@ -47,7 +56,7 @@ public class HttpRequestsHandler {
 
 //    Method that sends a json as a GET request
     public void sendGet(final String json) {
-        Thread thread = new Thread(new Runnable() {
+        this.networkingThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -56,6 +65,10 @@ public class HttpRequestsHandler {
                     os.writeBytes(json);
                     os.flush();
                     os.close();
+
+                    responseCode = conn.getResponseCode();
+                    responseMessage = conn.getResponseMessage();
+                    
                     conn.disconnect();
 
                 } catch (Exception e) {
@@ -63,12 +76,12 @@ public class HttpRequestsHandler {
                 }
             }
         });
-        thread.start();
+        this.networkingThread.start();
     }
 
 //    Method that sends a json as a POST request
     public void sendPost(final String json) {
-        Thread thread = new Thread(new Runnable() {
+        this.networkingThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -77,6 +90,10 @@ public class HttpRequestsHandler {
                     os.writeBytes(json);
                     os.flush();
                     os.close();
+
+                    responseCode = conn.getResponseCode();
+                    responseMessage = conn.getResponseMessage();
+
                     conn.disconnect();
 
                 } catch (Exception e) {
@@ -84,6 +101,28 @@ public class HttpRequestsHandler {
                 }
             }
         });
-        thread.start();
+        this.networkingThread.start();
+    }
+
+//    Method that checks if the networkingThread is still running
+//    If the operation is ongoing, it returns true
+//    Otherwise, returns false
+    public boolean isOngoing() {
+        return networkingThread.isAlive();
+    }
+
+//    Method that returns the latest response from the server
+//    If the operation is ongoing, returns -1
+    public String getResponseMessage() {
+        if (isOngoing())
+            return "-1";
+        return responseMessage;
+    }
+
+    public int getResponseCode()
+    {
+        if (isOngoing())
+            return -1;
+        return responseCode;
     }
 }
