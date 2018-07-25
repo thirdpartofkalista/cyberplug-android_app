@@ -2,7 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.criss.cyberplug">
 
+    <!--Internet permission for networking-->
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <!--Camera persmission for QR code scanning-->
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"

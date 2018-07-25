@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 27 /*compileSdkVersion 28*/ /*--old*/
     defaultConfig {
         applicationId "com.criss.cyberplug"
         minSdkVersion 24
-        targetSdkVersion 28
+        targetSdkVersion 27 /*targetSdkVersion 28*/ /*--old*/
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -19,11 +19,25 @@ android {
 }
 
 dependencies {
+//    Initial stuff
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:28.0.0-alpha3'
+//    implementation 'com.android.support:appcompat-v7:28.0.0-alpha3' /*--old*/
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+//    GSON
     implementation 'com.google.code.gson:gson:2.8.5'
+
+//    Navigation drawer
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
+
+//    QR Code scanner
+//    implementation 'com.budiyev.android:code-scanner:1.9.2'
+
+//    Firebase authentication
+//    implementation 'com.google.firebase:firebase-auth:16.0.2'
+
 }
