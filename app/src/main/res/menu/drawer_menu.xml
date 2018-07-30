@@ -1,25 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/navigation_group">
          <item
              android:id="@+id/all_devices_button"
-             android:title= "All devices" />
+             android:title= "All devices"
+             android:checkable="true"/>
          <item
              android:id="@+id/groups_button"
-             android:title= "Groups" />
+             android:title= "Groups"
+             android:checkable="true"/>
     </group>
-    <group android:checkableBehavior="none">
+    <group
+        android:id="@+id/action_group">
         <item
             android:id="@+id/settings_button"
-            android:title= "Settings" />
+            android:title= "Settings"
+            android:checkable="false"/>
         <item
             android:id="@+id/about_button"
-            android:title= "About" />
+            android:title= "About"
+            android:checkable="false"/>
         <item
             android:id="@+id/help_button"
-            android:title= "Help" />
+            android:title= "Help"
+            android:checkable="false"/>
         <item
             android:id="@+id/log_out_button"
-            android:title= "Log out" />
+            android:title= "Log out"
+            android:checkable="false"/>
     </group>
 </menu>
