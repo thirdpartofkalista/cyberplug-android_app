@@ -30,7 +30,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/settings_button_device"
+        android:id="@+id/device_settings_button"
         android:layout_width="70dp"
         android:layout_height="31dp"
         android:layout_marginBottom="8dp"
