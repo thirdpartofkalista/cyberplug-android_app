@@ -7,10 +7,8 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.Switch;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.criss.cyberplug.R;
 import com.criss.cyberplug.types.Device;
@@ -61,9 +59,9 @@ public class DeviceListAdapter extends ArrayAdapter<Device> implements View.OnCl
             view = inflater.inflate(R.layout.device_item, parent, false);
 
 //            Retrieve the items from the device layout
-            viewHolder.deviceName = (TextView) view.findViewById(R.id.device_name);
-            viewHolder.deviceSwitch = (Switch) view.findViewById(R.id.device_switch);
-            viewHolder.settingButton = (Button) view.findViewById(R.id.device_settings_button);
+            viewHolder.deviceName = view.findViewById(R.id.device_name);
+            viewHolder.deviceSwitch = view.findViewById(R.id.device_switch);
+            viewHolder.settingButton = view.findViewById(R.id.device_settings_button);
 
             result = view;
 
@@ -94,11 +92,11 @@ public class DeviceListAdapter extends ArrayAdapter<Device> implements View.OnCl
 
                 // TODO: 03.08.2018 add functionality to the status switch
                 if (isChecked) {
-
+                    Toast.makeText(getContext(), "Device " + device.getName() + " has been turned on.", Toast.LENGTH_SHORT).show();
                 }
 
                 else {
-
+                    Toast.makeText(getContext(), "Device " + device.getName() + " has been turned off.", Toast.LENGTH_SHORT).show();
                 }
 
             }
