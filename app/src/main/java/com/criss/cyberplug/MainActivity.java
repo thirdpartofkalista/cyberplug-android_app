@@ -1,12 +1,15 @@
 package com.criss.cyberplug;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.ListView;
+import android.support.v7.widget.Toolbar;
 
 import com.criss.cyberplug.list_adapters.DeviceListAdapter;
 import com.criss.cyberplug.list_adapters.GroupListAdapter;
@@ -18,7 +21,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private DrawerLayout mainPage;
+    private DrawerLayout drawerLayout;
 
     private boolean shouldReloadList = false;
 
@@ -33,6 +36,12 @@ public class MainActivity extends AppCompatActivity {
     private DeviceListAdapter deviceListAdapter;
 
     private GroupListAdapter groupListAdapter;
+
+    private Toolbar toolbar;
+
+    private ActionBar actionBar;
+
+    private FloatingActionButton addButton;
 
 
     private void reloadList() {
@@ -56,38 +65,78 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+//    Handle the interaction with the action bar
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mainPage = findViewById(R.id.drawer_layout);
+//        Enable the toolbar
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
+//        Enable the actionbar
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+
+//        find view by ids
+        drawerLayout = findViewById(R.id.drawer_layout);
+        list = findViewById(R.id.main_list);
+        addButton = findViewById(R.id.add_button);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+
+//        Initialize the list
         initializeList();
         reloadList();
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
+//        Handle the interaction with the drawer
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
 
                         if (menuItem.getItemId() == R.id.all_devices_button) {
+                            if (lastPlace != 0)
+                                shouldReloadList = true;
                             lastPlace = 0;
                             menuItem.setChecked(true);
-                            shouldReloadList = true;
                         }
                         else if (menuItem.getItemId() == R.id.groups_button) {
+                            if (lastPlace != 1)
+                                shouldReloadList = true;
                             lastPlace = 1;
                             menuItem.setChecked(true);
-                            shouldReloadList = true;
                         }
                         else {
+                            switch (menuItem.getItemId()) {
+                                case R.id.settings_button:
+                                    break;
 
+                                case R.id.about_button:
+                                    break;
+
+                                case R.id.help_button:
+                                    break;
+
+                                case R.id.log_out_button:
+                                    break;
+                            }
                         }
 
-                        mainPage.closeDrawers();
+                        drawerLayout.closeDrawers();
 
                         if (shouldReloadList)
                             reloadList();
