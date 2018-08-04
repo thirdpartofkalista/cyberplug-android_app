@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import com.criss.cyberplug.R;
+import com.criss.cyberplug.networking.NetworkHandler;
 import com.criss.cyberplug.types.Group;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class GroupListAdapter extends ArrayAdapter<Group> implements View.OnClic
 
     }
 
-    public GroupListAdapter(ArrayList<Group> data, Context context) {
+    public GroupListAdapter(ArrayList<Group> data, Context context, NetworkHandler networkHandler) {
         super(context, R.layout.device_item, data);
         this.context = context;
     }

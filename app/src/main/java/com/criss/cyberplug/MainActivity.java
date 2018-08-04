@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.criss.cyberplug.list_adapters.DeviceListAdapter;
 import com.criss.cyberplug.list_adapters.GroupListAdapter;
+import com.criss.cyberplug.networking.NetworkHandler;
 import com.criss.cyberplug.types.Device;
 import com.criss.cyberplug.types.Group;
 
@@ -45,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton addButton;
 
     private NavigationView navigationView;
+
+    private NetworkHandler networkHandler;
 
 
 //    Handle the interaction with the drawer menu items
@@ -125,9 +128,9 @@ public class MainActivity extends AppCompatActivity {
 
         groups = new ArrayList<>();
 
-        deviceListAdapter = new DeviceListAdapter(devices, getApplicationContext());
+        deviceListAdapter = new DeviceListAdapter(devices, getApplicationContext(), networkHandler);
 
-        groupListAdapter = new GroupListAdapter(groups, getApplicationContext());
+        groupListAdapter = new GroupListAdapter(groups, getApplicationContext(), networkHandler);
 
 //        reloadList();
     }
@@ -154,6 +157,9 @@ public class MainActivity extends AppCompatActivity {
         addButton = findViewById(R.id.add_button);
         navigationView = findViewById(R.id.nav_view);
         addButton = findViewById(R.id.add_button);
+
+//        Initialize networking
+        networkHandler = new NetworkHandler(getApplicationContext());
 
 //        Initialize the list
         initializeList();

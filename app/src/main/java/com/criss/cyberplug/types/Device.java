@@ -1,11 +1,13 @@
 package com.criss.cyberplug.types;
 
+import com.google.gson.annotations.Expose;
+
 public class Device {
 
-    private int id;
-    private String name;
-    private boolean status;
-    private boolean isOnline;
+    @Expose private int id;
+    @Expose(serialize = false) private String name;
+    @Expose private boolean status;
+    @Expose(serialize = false) private boolean isOnline;
 
     public Device(int id, String name, boolean status, boolean isOnline) {
         this.id = id;
@@ -22,8 +24,16 @@ public class Device {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public boolean getStatus() {
         return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     public boolean isOnline() {

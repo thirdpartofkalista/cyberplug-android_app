@@ -11,8 +11,11 @@ import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.criss.cyberplug.R;
+import com.criss.cyberplug.networking.NetworkHandler;
 import com.criss.cyberplug.types.Device;
 import com.criss.cyberplug.types.DeviceViewHolder;
+import com.criss.cyberplug.types.Operation;
+import com.criss.cyberplug.types.OperationTypes;
 
 import java.util.ArrayList;
 
@@ -26,6 +29,8 @@ public class DeviceListAdapter extends ArrayAdapter<Device> implements View.OnCl
 
     private Context context;
 
+    private NetworkHandler networkHandler;
+
 
 
     @Override
@@ -33,9 +38,10 @@ public class DeviceListAdapter extends ArrayAdapter<Device> implements View.OnCl
 
     }
 
-    public DeviceListAdapter(ArrayList<Device> data, Context context) {
+    public DeviceListAdapter(ArrayList<Device> data, Context context, NetworkHandler networkHandler) {
         super(context, R.layout.device_item, data);
         this.context = context;
+        this.networkHandler = networkHandler;
     }
 
     @Override
@@ -90,13 +96,16 @@ public class DeviceListAdapter extends ArrayAdapter<Device> implements View.OnCl
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
 
-                // TODO: 03.08.2018 add functionality to the status switch
+                device.setStatus(isChecked);
+
                 if (isChecked) {
                     Toast.makeText(getContext(), "Device " + device.getName() + " has been turned on.", Toast.LENGTH_SHORT).show();
+                    networkHandler.addOperation(OperationTypes.UPDATE_DEVICE_STATUS, device);
                 }
 
                 else {
                     Toast.makeText(getContext(), "Device " + device.getName() + " has been turned off.", Toast.LENGTH_SHORT).show();
+                    networkHandler.addOperation(OperationTypes.UPDATE_DEVICE_STATUS, device);
                 }
 
             }

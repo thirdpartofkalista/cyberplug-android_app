@@ -1,10 +1,12 @@
 package com.criss.cyberplug.types;
 
+import com.google.gson.annotations.Expose;
+
 public class Group {
 
-    private int id;
-    private String name;
-    private boolean status;
+    @Expose private int id;
+    @Expose(serialize = false) private String name;
+    @Expose private boolean status;
 
     public Group(int id, String name, boolean status) {
         this.id = id;
