@@ -1,6 +1,7 @@
 package com.criss.cyberplug.list_adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +15,12 @@ import com.criss.cyberplug.R;
 import com.criss.cyberplug.networking.NetworkHandler;
 import com.criss.cyberplug.types.Device;
 import com.criss.cyberplug.types.DeviceViewHolder;
-import com.criss.cyberplug.types.Operation;
-import com.criss.cyberplug.types.OperationTypes;
 
 import java.util.ArrayList;
 
 public class DeviceListAdapter extends ArrayAdapter<Device> implements View.OnClickListener{
+
+    private static final String TAG = "DeviceListAdapter";
 
 //    The last position of an item in the array
     private int lastPosition = -1;
@@ -32,7 +33,6 @@ public class DeviceListAdapter extends ArrayAdapter<Device> implements View.OnCl
     private NetworkHandler networkHandler;
 
 
-
     @Override
     public void onClick(View view) {
 
@@ -43,6 +43,7 @@ public class DeviceListAdapter extends ArrayAdapter<Device> implements View.OnCl
         this.context = context;
         this.networkHandler = networkHandler;
     }
+
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
@@ -67,7 +68,7 @@ public class DeviceListAdapter extends ArrayAdapter<Device> implements View.OnCl
 //            Retrieve the items from the device layout
             viewHolder.deviceName = view.findViewById(R.id.device_name);
             viewHolder.deviceSwitch = view.findViewById(R.id.device_switch);
-            viewHolder.settingButton = view.findViewById(R.id.device_settings_button);
+            viewHolder.settingsButton = view.findViewById(R.id.device_settings_button);
 
             result = view;
 
@@ -97,20 +98,18 @@ public class DeviceListAdapter extends ArrayAdapter<Device> implements View.OnCl
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
 
                 device.setStatus(isChecked);
+                Log.i(TAG, "switch toggled");
 
-                if (isChecked) {
-                    Toast.makeText(getContext(), "Device " + device.getName() + " has been turned on.", Toast.LENGTH_SHORT).show();
-                    networkHandler.addOperation(OperationTypes.UPDATE_DEVICE_STATUS, device);
+                if (networkHandler.updateDeviceStatus(device)) {
+                    Toast.makeText(context, "Device status updated succesfully.", Toast.LENGTH_SHORT).show();
                 }
-
                 else {
-                    Toast.makeText(getContext(), "Device " + device.getName() + " has been turned off.", Toast.LENGTH_SHORT).show();
-                    networkHandler.addOperation(OperationTypes.UPDATE_DEVICE_STATUS, device);
+                    Toast.makeText(context, "Encountered an error.", Toast.LENGTH_SHORT).show();
                 }
 
             }
         });
-        viewHolder.settingButton.setOnClickListener(new View.OnClickListener() {
+        viewHolder.settingsButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {

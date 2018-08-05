@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
         addButton = findViewById(R.id.add_button);
 
 //        Initialize networking
-        networkHandler = new NetworkHandler(getApplicationContext());
+        networkHandler = new NetworkHandler();
 
 //        Initialize the list
         initializeList();

@@ -8,5 +8,5 @@ public class DeviceViewHolder {
 
     public TextView deviceName;
     public Switch deviceSwitch;
-    public Button settingButton;
+    public Button settingsButton;
 }

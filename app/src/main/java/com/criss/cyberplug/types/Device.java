@@ -5,7 +5,7 @@ import com.google.gson.annotations.Expose;
 public class Device {
 
     @Expose private int id;
-    @Expose(serialize = false) private String name;
+    @Expose private String name;
     @Expose private boolean status;
     @Expose(serialize = false) private boolean isOnline;
 
