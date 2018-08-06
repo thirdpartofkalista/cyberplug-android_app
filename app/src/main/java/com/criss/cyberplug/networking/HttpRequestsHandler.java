@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 
 //  Class that handles sending and receiving http requests
@@ -29,26 +30,12 @@ public class HttpRequestsHandler {
 
         public String responseData;
 
-        public boolean hadError = false;
-
-//        private boolean finished = false;
+        public ArrayList<Exception> exceptions;
 
         public Response() {
 
         }
 
-//        public void markAsFinished() {
-//            this.finished = true;
-//        }
-//
-        public void reset() {
-//            this.finished = false;
-            this.hadError = false;
-        }
-//
-//        public boolean isFinished() {
-//            return finished;
-//        }
     }
 
     private volatile Response response;
@@ -115,13 +102,9 @@ public class HttpRequestsHandler {
         return result.toString();
     }
 
-//    Main methods
 
-//    Method that sends a json as a GET request
-    public Response sendGet(final String json, final URL url) {
-
-        response.reset();
-        Log.i(TAG, "Response - reset.");
+//    Method that sends a json
+    public boolean send(final String json, final URL url, final String method) {
 
         this.networkingThread = new Thread(new Runnable() {
             @Override
@@ -132,7 +115,7 @@ public class HttpRequestsHandler {
 
                 try {
 
-                    conn = getConnection(url, "GET", new String[]{"Content-type", "application/json"}, true, true);
+                    conn = getConnection(Urls.serverDeviceUrl, method, new String[]{"Content-type", "application/json"}, true, true);
                     Log.i(TAG, "HttpHandler Thread - retrieved connection.");
                     conn.connect();
                     Log.i(TAG, "HttpHandler Thread - connected.");
@@ -149,70 +132,15 @@ public class HttpRequestsHandler {
                     Log.i(TAG, "HttpHandler Thread - retrieved response data.");
 
                 } catch (Exception e) {
-                    e.printStackTrace();
-//                    response.hadError = true;
+                    Log.e(TAG, e.getMessage());
+                    response.exceptions.add(e);
                 } finally {
                     try {
                         conn.disconnect();
                         Log.i(TAG, "HttpHandler Thread - disconnected.");
                     } catch (Exception e) {
-                        e.printStackTrace();
-                        response.hadError = true;
-                    } finally {
-//                        response.markAsFinished();
-                    }
-                }
-
-            }
-        });
-        this.networkingThread.start();
-        Log.i(TAG, "HttpHandler Thread - starting.");
-        return response;
-    }
-
-//    Method that sends a json as a POST request
-    public boolean sendPost(final String json, final URL url) {
-
-        response.reset();
-        Log.i(TAG, "Response - reset.");
-
-        this.networkingThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                HttpURLConnection conn = null;
-                Log.i(TAG, "HttpHandler Thread - started.");
-
-                try {
-
-                    conn = getConnection(Urls.serverDeviceUrl, "POST", new String[]{"Content-type", "application/json"}, true, true);
-                    Log.i(TAG, "HttpHandler Thread - retrieved connection.");
-                    conn.connect();
-                    Log.i(TAG, "HttpHandler Thread - connected.");
-
-                    writeStream(conn, json);
-                    Log.i(TAG, "HttpHandler Thread - writeStream() succesful.");
-
-                    response.responseCode = conn.getResponseCode();
-                    Log.i(TAG, "HttpHandler Thread - retrieved response code.");
-                    response.responseMessage = conn.getResponseMessage();
-                    Log.i(TAG, "HttpHandler Thread - retrieved response message.");
-                    response.responseData = readStream(conn);
-                    Log.i(TAG, "HttpHandler Thread - readStream() succesful.");
-                    Log.i(TAG, "HttpHandler Thread - retrieved response data.");
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-//                    response.hadError = true;
-                } finally {
-                    try {
-                        conn.disconnect();
-                        Log.i(TAG, "HttpHandler Thread - disconnected.");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        response.hadError = true;
-                    } finally {
-//                        response.markAsFinished();
+                        Log.e(TAG, e.getMessage());
+                        response.exceptions.add(e);
                     }
                 }
 
@@ -223,16 +151,16 @@ public class HttpRequestsHandler {
         return true;
     }
 
-//    Method that checks if the networkingThread is still running
-//    If the operation is ongoing, it returns true
-//    Otherwise, returns false
     public boolean isOngoing() {
         return networkingThread.isAlive();
     }
 
     public Response getResponse() {
-        Log.i(TAG, "HttpHandler - retrieve response");
         return response;
+    }
+
+    public void join() throws InterruptedException {
+        networkingThread.join();
     }
 
 }
