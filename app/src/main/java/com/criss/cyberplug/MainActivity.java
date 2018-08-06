@@ -2,6 +2,7 @@ package com.criss.cyberplug;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -12,21 +13,25 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.criss.cyberplug.constants.MessageType;
-import com.criss.cyberplug.constants.RequestCode;
+import com.criss.cyberplug.constants.Authentication;
+import com.criss.cyberplug.types.thread_communication.MessageType;
+import com.criss.cyberplug.constants.Preferences;
+import com.criss.cyberplug.types.networking.RequestCode;
 import com.criss.cyberplug.list_adapters.DeviceListAdapter;
 import com.criss.cyberplug.list_adapters.GroupListAdapter;
 import com.criss.cyberplug.networking.NetworkHandler;
-import com.criss.cyberplug.types.Device;
-import com.criss.cyberplug.types.Group;
+import com.criss.cyberplug.types.list.Device;
+import com.criss.cyberplug.types.list.Group;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,6 +64,10 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
 
     private NetworkHandler networkHandler;
+
+    private Preferences preferences;
+
+    private Authentication authentication;
 
 
 
@@ -179,25 +188,34 @@ public class MainActivity extends AppCompatActivity {
             int id = menuItem.getItemId();
 
             switch (id) {
-                case R.id.all_devices_button:
+                case R.id.devices_list_button:
                     lastPlace = 0;
                     updateListUi();
                     menuItem.setChecked(true);
                     break;
 
-                case R.id.groups_button:
+                case R.id.groups_list_button:
                     lastPlace = 1;
                     updateListUi();
                     menuItem.setChecked(true);
                     break;
 
                 case R.id.about_button:
+                    Intent a = new Intent(/*getApplication(), AboutActivity.class*/);
+                    startActivity(a);
                     break;
 
                 case R.id.help_button:
+                    Intent b = new Intent(/*getApplication(), AboutActivity.class*/);
+                    startActivity(b);
                     break;
 
                 case R.id.log_out_button:
+                    preferences.setLoggedIn(false);
+                    preferences.setUserName("");
+                    Intent c = new Intent(getApplication(), LoginActivity.class);
+                    startActivity(c);
+                    finish();
                     break;
             }
 
@@ -222,16 +240,35 @@ public class MainActivity extends AppCompatActivity {
 //    Handle the interaction with the action bar
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         switch (item.getItemId()) {
+
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
                 return true;
+
+            case R.id.select_menu_button:
+                Toast.makeText(getApplicationContext(), "tadaa", Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.select_all_menu_button:
+                Toast.makeText(getApplicationContext(), "tadaa 2", Toast.LENGTH_SHORT).show();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
 
-//    Retrieve data from activities that we expect a result from
+        MenuInflater inflater = getMenuInflater();
+
+        inflater.inflate(R.menu.action_bar_menu, menu);
+
+        return true;
+    }
+
+    //    Retrieve data from activities that we expect a result from
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -271,13 +308,28 @@ public class MainActivity extends AppCompatActivity {
 //    ----------Activity methods--------------------------------------------------
 //    ----------------------------------------------------------------------------
     @Override
+    public void onBackPressed() {
+
+        if (drawerLayout.isDrawerOpen(navigationView)) {
+            drawerLayout.closeDrawer(navigationView);
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        Check preferences
+        preferences = new Preferences(getApplicationContext());
+
 //        Initialize networking
-        networkHandler = new NetworkHandler(uiHandler);
+        networkHandler = new NetworkHandler(uiHandler, new Authentication(preferences.getUserName()));
 
 //        Enable the toolbar
         toolbar = findViewById(R.id.toolbar);
@@ -293,6 +345,7 @@ public class MainActivity extends AppCompatActivity {
         list = findViewById(R.id.main_list);
         addButton = findViewById(R.id.add_button);
         navigationView = findViewById(R.id.nav_view);
+        View navHeader = navigationView.getHeaderView(0);
         addButton = findViewById(R.id.add_button);
 
 //        Initialize the list
@@ -301,6 +354,10 @@ public class MainActivity extends AppCompatActivity {
 //        Set event listeners
         navigationView.setNavigationItemSelectedListener(drawerOnNavigationItemSelectedListener);
         addButton.setOnClickListener(addButtonOnClickListener);
+
+//        Update nav view username text field
+        TextView userNameTextView = navHeader.findViewById(R.id.username_text_view);
+        userNameTextView.setText(preferences.getUserName());
 
     }
 

@@ -118,7 +118,7 @@ public class HttpRequestsHandler {
 //    Main methods
 
 //    Method that sends a json as a GET request
-    public Response sendGet(final String json) {
+    public Response sendGet(final String json, final URL url) {
 
         response.reset();
         Log.i(TAG, "Response - reset.");
@@ -132,7 +132,7 @@ public class HttpRequestsHandler {
 
                 try {
 
-                    conn = getConnection(Urls.serverDeviceUrl, "GET", new String[]{"Content-type", "application/json"}, true, true);
+                    conn = getConnection(url, "GET", new String[]{"Content-type", "application/json"}, true, true);
                     Log.i(TAG, "HttpHandler Thread - retrieved connection.");
                     conn.connect();
                     Log.i(TAG, "HttpHandler Thread - connected.");
@@ -171,7 +171,7 @@ public class HttpRequestsHandler {
     }
 
 //    Method that sends a json as a POST request
-    public boolean sendPost(final String json) {
+    public boolean sendPost(final String json, final URL url) {
 
         response.reset();
         Log.i(TAG, "Response - reset.");

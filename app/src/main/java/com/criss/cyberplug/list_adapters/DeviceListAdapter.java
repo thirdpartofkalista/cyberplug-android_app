@@ -13,8 +13,8 @@ import android.widget.Toast;
 
 import com.criss.cyberplug.R;
 import com.criss.cyberplug.networking.NetworkHandler;
-import com.criss.cyberplug.types.Device;
-import com.criss.cyberplug.types.DeviceViewHolder;
+import com.criss.cyberplug.types.list.Device;
+import com.criss.cyberplug.types.list.DeviceViewHolder;
 
 import java.util.ArrayList;
 

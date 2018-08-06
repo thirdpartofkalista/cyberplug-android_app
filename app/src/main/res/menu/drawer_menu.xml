@@ -4,10 +4,10 @@
         android:id="@+id/navigation_group"
         android:checkableBehavior="single">
          <item
-             android:id="@+id/all_devices_button"
+             android:id="@+id/devices_list_button"
              android:title= "All devices" />
          <item
-             android:id="@+id/groups_button"
+             android:id="@+id/groups_list_button"
              android:title= "Groups" />
     </group>
     <group

@@ -7,7 +7,7 @@ import android.widget.ArrayAdapter;
 
 import com.criss.cyberplug.R;
 import com.criss.cyberplug.networking.NetworkHandler;
-import com.criss.cyberplug.types.Group;
+import com.criss.cyberplug.types.list.Group;
 
 import java.util.ArrayList;
 

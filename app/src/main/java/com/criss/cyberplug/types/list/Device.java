@@ -1,4 +1,4 @@
-package com.criss.cyberplug.types;
+package com.criss.cyberplug.types.list;
 
 import com.google.gson.annotations.Expose;
 

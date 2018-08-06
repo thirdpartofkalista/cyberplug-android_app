@@ -4,13 +4,16 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.criss.cyberplug.constants.MessageType;
-import com.criss.cyberplug.types.Device;
+import com.criss.cyberplug.constants.Authentication;
+import com.criss.cyberplug.types.thread_communication.MessageType;
+import com.criss.cyberplug.constants.Urls;
+import com.criss.cyberplug.types.list.Device;
 import com.criss.cyberplug.networking.HttpRequestsHandler.Response;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class NetworkHandler {
@@ -23,34 +26,41 @@ public class NetworkHandler {
 
     private Handler uiHandler;
 
-//    public String deviceToJson(Device device) {
-//        return gson.toJson(device);
-//    }
-//
-//    public String groupToJson(Group group) {
-//        return gson.toJson(group);
-//    }
-//
-//    public Device jsonToDevice(String json) {
-//        return gson.fromJson(json, Device.class);
-//    }
-//
-//    public Group jsonToGroup(String json) {
-//        return gson.fromJson(json, Group.class);
-//    }
-//
-//    public ArrayList jsonToDeviceList(String json) {
-//        return gson.fromJson(json, ArrayList.class);
-//    }
-//
-//    public ArrayList jsonToGroupList(String json) {
-//        return gson.fromJson(json, ArrayList.class);
-//    }
+    private final Authentication authentication;
+
+    private static class NetworkingMethods {
+
+        public Payload assemblePayload(Payload.Type type, String token) {
+            return new Payload(type,token);
+        }
+
+        public Payload assemblePayload(Payload.Type type, String token, Object data) {
+            return new Payload(type, token, data);
+        }
 
 
-    public NetworkHandler(Handler handler) {
+
+    }
+
+    private class NetworkingWorkerBlueprint extends Thread {
+
+        private URL url;
+
+        private String string;
+
+        private Payload payload;
+
+        public NetworkingWorkerBlueprint(URL url, String method) {
+            // TODO: 06.08.2018 finish work on the blueprint and replace it in the functions 
+        }
+
+    }
+
+
+    public NetworkHandler(Handler handler, Authentication authentication) {
         this.httpHandler = new HttpRequestsHandler();
         this.uiHandler = handler;
+        this.authentication = authentication;
         Log.i(TAG, "NetworkHandler - instance created.");
     }
 
@@ -62,7 +72,7 @@ public class NetworkHandler {
         Payload payload = new Payload(Payload.Type.DEVICE_STATUS_UPDATE, "token", device);
         Log.i(TAG, "NetworkHandler - created payload.");
 
-        httpHandler.sendPost(gson.toJson(payload));
+        httpHandler.sendPost(gson.toJson(payload), Urls.serverDeviceUrl);
         Log.i(TAG, "NetworkHandler - forwarded the task to HttpHandler.");
 
         while (httpHandler.isOngoing()) {
@@ -89,7 +99,7 @@ public class NetworkHandler {
                 Payload payload = new Payload(Payload.Type.DEVICE_NEW, "token", device);
                 Log.i(TAG, "NetworkHandler - worker thread - payload created.");
 
-                httpHandler.sendPost(gson.toJson(payload));
+                httpHandler.sendPost(gson.toJson(payload), Urls.serverDeviceUrl);
                 Log.i(TAG, "NetworkHandler - worker thread - forwarded task to HttpHandler.");
 
                 while (httpHandler.isOngoing()) {
@@ -133,7 +143,7 @@ public class NetworkHandler {
                 Payload payload = new Payload(Payload.Type.DEVICE_LIST_REQUEST, "token");
                 Log.i(TAG, "NetworkHandler - worker thread - payload created.");
 
-                httpHandler.sendPost(gson.toJson(payload));
+                httpHandler.sendPost(gson.toJson(payload), Urls.serverDeviceUrl);
                 Log.i(TAG, "NetworkHandler - worker thread - forwarded task to HttpHandler.");
 
                 while (httpHandler.isOngoing()) {
@@ -188,7 +198,7 @@ public class NetworkHandler {
                 Payload payload = new Payload(Payload.Type.DEVICE_NEW, "token", list);
                 Log.i(TAG, "NetworkHandler - worker thread - payload created.");
 
-                httpHandler.sendPost(gson.toJson(payload));
+                httpHandler.sendPost(gson.toJson(payload), Urls.serverDeviceUrl);
                 Log.i(TAG, "NetworkHandler - worker thread - forwarded task to httpHandler.");
 
                 while (httpHandler.isOngoing()) {

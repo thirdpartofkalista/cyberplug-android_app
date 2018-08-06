@@ -1,4 +1,4 @@
-package com.criss.cyberplug.constants;
+package com.criss.cyberplug.types.thread_communication;
 
 public enum MessageType {
     LIST_RELOAD(0),
