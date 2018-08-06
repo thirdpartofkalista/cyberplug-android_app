@@ -6,17 +6,12 @@ import android.util.Log;
 
 import com.criss.cyberplug.constants.MessageType;
 import com.criss.cyberplug.types.Device;
-import com.criss.cyberplug.types.Group;
 import com.criss.cyberplug.networking.HttpRequestsHandler.Response;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.internal.LinkedTreeMap;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
-import java.util.List;
 
 public class NetworkHandler {
 
@@ -62,7 +57,7 @@ public class NetworkHandler {
 
     public boolean updateDeviceStatus(Device device) {
 
-        Log.i(TAG, "NetworkHandler - task updateDeviceStatus started.");
+        Log.i(TAG, "NetworkHandler - updateDeviceStatus().");
 
         Payload payload = new Payload(Payload.Type.DEVICE_STATUS_UPDATE, "token", device);
         Log.i(TAG, "NetworkHandler - created payload.");
@@ -82,24 +77,53 @@ public class NetworkHandler {
 
     }
 
-    public boolean addDevice(Device device) {
-        // TODO: 06.08.2018 replace uploadDeviceList with this
-        Payload payload = new Payload(Payload.Type.DEVICE_NEW, "token", device);
+    public void addDevice(final Device device) {
 
-        httpHandler.sendPost(gson.toJson(payload));
+        Log.i(TAG, "NetworkHandler - addDevice().");
 
-        while (httpHandler.isOngoing()) {
+        Thread worker = new Thread(new Runnable() {
 
-        }
+            @Override
+            public void run() {
 
-        Response response = httpHandler.getResponse();
+                Payload payload = new Payload(Payload.Type.DEVICE_NEW, "token", device);
+                Log.i(TAG, "NetworkHandler - worker thread - payload created.");
 
-        return response.responseCode == HttpURLConnection.HTTP_OK;
+                httpHandler.sendPost(gson.toJson(payload));
+                Log.i(TAG, "NetworkHandler - worker thread - forwarded task to HttpHandler.");
+
+                while (httpHandler.isOngoing()) {
+
+                }
+                Log.i(TAG, "NetworkHandler - worker thread - HttpHandler finished the task.");
+
+                Response response = httpHandler.getResponse();
+                Log.i(TAG, "NetworkHandler - worker thread - retrieved the response.");
+
+                if (response.responseCode != HttpURLConnection.HTTP_OK) {
+                    Log.i(TAG, "NetworkHandler - worker thread - response code != HTTP_OK.");
+                    Message msg = new Message();
+                    msg.what = MessageType.DEVICE_NEW.getValue();
+                    msg.arg1 = 0;
+                    uiHandler.sendMessage(msg);
+                    Log.i(TAG, "NetworkHandler - worker thread - sent message to uiHandler.");
+                    return;
+                }
+
+                Message msg = new Message();
+                msg.what = MessageType.DEVICE_NEW.getValue();
+                msg.arg1 = 1;
+                uiHandler.sendMessage(msg);
+                Log.i(TAG, "NetworkHandler - worker thread - sent message to uiHandler.");
+            }
+        });
+        worker.start();
+        Log.i(TAG, "NetworkHandler - worker thread - worker thread started.");
     }
 
     public void getDeviceList() {
 
-        Log.i(TAG, "NetworkHandler - getDeviceList.");
+        Log.i(TAG, "NetworkHandler - getDeviceList().");
 
         Thread worker = new Thread(new Runnable() {
 
@@ -123,8 +147,8 @@ public class NetworkHandler {
                 if (response.responseCode != HttpURLConnection.HTTP_OK) {
                     Log.i(TAG, "NetworkHandler - worker thread - response code != HTTP_OK.");
                     Message msg = new Message();
-                    msg.what = MessageType.RELOAD_LIST.getValue();
-                    msg.arg1 = -1;
+                    msg.what = MessageType.LIST_RELOAD.getValue();
+                    msg.arg1 = 0;
                     uiHandler.sendMessage(msg);
                     Log.i(TAG, "NetworkHandler - worker thread - sent message to uiHandler.");
                     return;
@@ -135,7 +159,7 @@ public class NetworkHandler {
                     list = gson.fromJson(response.responseData, Device[].class);
                     Log.i(TAG, "NetworkHandler - worker thread - converted received JSON to Device[].");
                     Message msg = new Message();
-                    msg.what = MessageType.RELOAD_LIST.getValue();
+                    msg.what = MessageType.LIST_RELOAD.getValue();
                     msg.arg1 = 1;
                     msg.obj = list;
                     uiHandler.sendMessage(msg);
@@ -154,7 +178,7 @@ public class NetworkHandler {
 
     public void uploadDeviceList(final ArrayList<Device> list) {
 
-        Log.i(TAG, "NetworkHandler - worker thread - uploadDeviceList");
+        Log.i(TAG, "NetworkHandler - worker thread - uploadDeviceList()");
 
         Thread worker = new Thread(new Runnable() {
 

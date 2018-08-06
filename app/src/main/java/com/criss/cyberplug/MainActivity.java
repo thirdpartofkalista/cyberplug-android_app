@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.e(TAG, e.getMessage());
                 } finally {
                     Message msg = new Message();
-                    msg.what = MessageType.UPDATE_LIST_UI.getValue();
+                    msg.what = MessageType.LIST_UPDATE_UI.getValue();
                     if (shouldUpdateList) {
                         msg.arg1 = 1;
                     }
@@ -148,11 +148,11 @@ public class MainActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
 
-            if (msg.what == MessageType.RELOAD_LIST.getValue()) {
+            if (msg.what == MessageType.LIST_RELOAD.getValue()) {
                 reloadList((Device[]) msg.obj);
             }
 
-            if (msg.what == MessageType.UPDATE_LIST_UI.getValue()) {
+            if (msg.what == MessageType.LIST_UPDATE_UI.getValue()) {
                 updateListUi();
             }
 
@@ -243,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
 
                 devices.add(device);
 
-                networkHandler.uploadDeviceList(devices);
+                networkHandler.addDevice(device);
 
                 updateListUi();
 

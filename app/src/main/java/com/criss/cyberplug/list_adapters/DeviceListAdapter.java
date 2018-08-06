@@ -118,6 +118,8 @@ public class DeviceListAdapter extends ArrayAdapter<Device> implements View.OnCl
             }
         });
 
+        viewHolder.deviceSwitch.setChecked(device.getStatus());
+
         Log.i(TAG, "DeviceListAdapter - return view.");
         return view;
     }

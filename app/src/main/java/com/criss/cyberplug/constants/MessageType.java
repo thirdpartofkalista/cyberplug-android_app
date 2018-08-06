@@ -1,8 +1,9 @@
 package com.criss.cyberplug.constants;
 
 public enum MessageType {
-    RELOAD_LIST(0),
-    UPDATE_LIST_UI(1);
+    LIST_RELOAD(0),
+    LIST_UPDATE_UI(1),
+    DEVICE_NEW(2);
 
     private final int value;
 
@@ -17,10 +18,10 @@ public enum MessageType {
     @Override
     public String toString() {
         switch(this) {
-            case RELOAD_LIST:
-                return "RELOAD_LIST";
-            case UPDATE_LIST_UI:
-                return "UPDATE_LIST_UI";
+            case LIST_RELOAD:
+                return "LIST_RELOAD";
+            case LIST_UPDATE_UI:
+                return "LIST_UPDATE_UI";
             default:
                 return super.toString();
         }
