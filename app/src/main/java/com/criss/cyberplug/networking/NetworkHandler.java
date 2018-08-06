@@ -5,15 +5,14 @@ import android.os.Message;
 import android.util.Log;
 
 import com.criss.cyberplug.constants.Authentication;
+import com.criss.cyberplug.constants.Urls;
+import com.criss.cyberplug.networking.HttpRequestsHandler.Response;
+import com.criss.cyberplug.types.list.Device;
 import com.criss.cyberplug.types.thread_communication.MessageArg;
 import com.criss.cyberplug.types.thread_communication.MessageType;
-import com.criss.cyberplug.constants.Urls;
-import com.criss.cyberplug.types.list.Device;
-import com.criss.cyberplug.networking.HttpRequestsHandler.Response;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -35,9 +34,9 @@ public class NetworkHandler {
 
     private class NetworkingWorker extends Thread {
 
-        private URL url;
+        private static final String TAG = "Networking worker";
 
-        private String token;
+        private URL url;
 
         private String method;
 
@@ -58,18 +57,29 @@ public class NetworkHandler {
 
         private Response response;
 
+        private boolean shouldRetrieveDataAsObject = false;
 
-        public NetworkingWorker(URL url, String method, String token) {
+        private Class messageObjectClass = null;
+
+
+        public NetworkingWorker(URL url, String method) {
 
             super();
 
             this.url = url;
             this.method = method;
-            this.token = token;
 
             this.tasks = new ArrayList<Runnable>();
             this.exceptions = new ArrayList<Exception>();
 
+        }
+
+        public void logInfo(String text) {
+            Log.i(TAG, "(Info)Thread " + super.getId() + " - " + super.getName() + " --> " + text);
+        }
+
+        public void logError(String text) {
+            Log.e(TAG, "(Error)Thread " + super.getId() + " - " + super.getName() + " --> " + text);
         }
 
         Response getResponse() {
@@ -117,7 +127,9 @@ public class NetworkHandler {
             return this;
         }
 
-        public NetworkingWorker setMessageObjectType(Type t){
+        public NetworkingWorker retrieveDataAsObject(Class c){
+            this.shouldRetrieveDataAsObject = true;
+            this.messageObjectClass = c;
             return this;
         }
 
@@ -126,6 +138,8 @@ public class NetworkHandler {
         public void run() {
             super.run();
 
+            logInfo("started.");
+
             response = null;
 
             Message msg;
@@ -133,73 +147,124 @@ public class NetworkHandler {
 
             try {
                 httpHandler.send(gson.toJson(payload), this.url, this.method);
+                logInfo("passed request to httpHandler.");
             } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
+                e.printStackTrace();
+                logError(e.getMessage());
                 exceptions.add(e);
             }
 
             try {
+                logInfo("joining httpHandler thread, waiting.");
                 httpHandler.join();
+                logInfo("httpHandler thread finished.");
             } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
+                e.printStackTrace();
+                logError(e.getMessage());
                 exceptions.add(e);
             }
 
             try{
                 response = httpHandler.getResponse();
+                logInfo("retrieved the response.");
             } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
+                e.printStackTrace();
+                logError(e.getMessage());
                 exceptions.add(e);
             }
 
             if (response != null) {
-
+                logInfo("response is not null.");
                 if (response.responseCode != HttpsURLConnection.HTTP_OK) {
+                    logInfo("response code is not HTTP_OK.");
                     if (httpNotOkHandler != null) {
+                        logInfo("using the provided httpNotOkHandler.");
                         Thread tempWorker = new Thread(httpNotOkHandler);
                         tempWorker.start();
                         try {
+                            logInfo("joining httpNotOkHandler, waiting.");
                             tempWorker.join();
+                            logInfo("httpNotOkHandler finished.");
                         } catch (InterruptedException e) {
-                            Log.e(TAG, e.getMessage());
+                            e.printStackTrace();
+                            logError(e.getMessage());
                             exceptions.add(e);
                         }
                     }
                     else {
+                        logInfo("handling http not ok.");
                         msg = new Message();
-                        if (handlerMessageType != null)
+                        if (handlerMessageType != null) {
+                            logInfo("message type is: " + handlerMessageType.toString() + ".");
                             msg.what = handlerMessageType.getValue();
+                        }
+                        if (shouldRetrieveDataAsObject) {
+                            logInfo("worker should retrieve data as object.");
+                            try {
+                                msg.obj = gson.fromJson(response.responseData, messageObjectClass);
+                                logInfo("converted data to given object class.");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                logError(e.getMessage());
+                                exceptions.add(e);
+                            }
+                        }
                         msg.arg1 = MessageArg.FAIL.getValue();
                         handler.sendMessage(msg);
+                        logInfo("sent message to handler.");
                     }
                 }
                 else {
+                    logInfo("response is HTTP_OK.");
                     if (httpOkHandler != null) {
+                        logInfo("using the provided httpOkHandler.");
                         Thread tempWorker = new Thread(httpNotOkHandler);
                         tempWorker.start();
                         try {
+                            logInfo("joining httpNotOkHandler, waiting.");
                             tempWorker.join();
+                            logInfo("httpNotOkHandler finished.");
                         } catch (InterruptedException e) {
-                            Log.e(TAG, e.getMessage());
+                            e.printStackTrace();
+                            logError(e.getMessage());
                             exceptions.add(e);
                         }
                     }
                     else {
+                        logInfo("handling http ok.");
                         msg = new Message();
-                        if (handlerMessageType != null)
+                        if (handlerMessageType != null) {
+                            logInfo("message type is: " + handlerMessageType.toString() + ".");
                             msg.what = handlerMessageType.getValue();
+                        }
+                        if (shouldRetrieveDataAsObject) {
+                            logInfo("worker should retrieve data as object.");
+                            try {
+                                msg.obj = gson.fromJson(response.responseData, messageObjectClass);
+                                logInfo("converted data to given object class.");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                logError(e.getMessage());
+                                exceptions.add(e);
+                            }
+                        }
                         msg.arg1 = MessageArg.SUCCES.getValue();
                         handler.sendMessage(msg);
+                        logInfo("sent message to handler.");
                     }
                 }
 
             }
             else {
+                logInfo("no response.");
                 msg = new Message();
-                if (handlerMessageType != null)
+                if (handlerMessageType != null) {
+                    logInfo("message type is: " + handlerMessageType.toString() + ".");
                     msg.what = handlerMessageType.getValue();
+                }
                 msg.arg1 = MessageArg.NO_RESPONSE.getValue();
                 handler.sendMessage(msg);
+                logInfo("sent message to handler.");
             }
         }
     }
@@ -213,125 +278,32 @@ public class NetworkHandler {
     }
 
 
-    public boolean updateDeviceStatus(Device device) {
+    public void updateDeviceStatus(Device device) {
 
-        Log.i(TAG, "NetworkHandler - updateDeviceStatus().");
-
-        Payload payload = new Payload(Payload.Type.DEVICE_STATUS_UPDATE, "token", device);
-        Log.i(TAG, "NetworkHandler - created payload.");
-
-        httpHandler.send(gson.toJson(payload), Urls.serverDeviceUrl, "POST");
-        Log.i(TAG, "NetworkHandler - forwarded the task to HttpHandler.");
-
-        while (httpHandler.isOngoing()) {
-
-        }
-        Log.i(TAG, "NetworkHandler - HttpHandler finished the task.");
-
-        Response response = httpHandler.getResponse();
-        Log.i(TAG, "NetworkHandler - retrieved response.");
-
-        return response.responseCode == HttpURLConnection.HTTP_OK;
-
+        NetworkingWorker worker = new NetworkingWorker(Urls.serverDeviceUrl, "POST");
+        worker.setPayload(Payload.Type.DEVICE_STATUS_UPDATE, authentication.token, device)
+                .setHandler(uiHandler)
+                .setHandlerMessageType(MessageType.DEVICE_UPDATE_STATUS)
+                .start();
     }
 
     public void addDevice(final Device device) {
 
-        Log.i(TAG, "NetworkHandler - addDevice().");
-
-        Thread worker = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-
-                Payload payload = new Payload(Payload.Type.DEVICE_NEW, "token", device);
-                Log.i(TAG, "NetworkHandler - worker thread - payload created.");
-
-                httpHandler.send(gson.toJson(payload), Urls.serverDeviceUrl, "POST");
-                Log.i(TAG, "NetworkHandler - worker thread - forwarded task to HttpHandler.");
-
-                while (httpHandler.isOngoing()) {
-
-                }
-                Log.i(TAG, "NetworkHandler - worker thread - HttpHandler finished the task.");
-
-                Response response = httpHandler.getResponse();
-                Log.i(TAG, "NetworkHandler - worker thread - retrieved the response.");
-
-                if (response.responseCode != HttpURLConnection.HTTP_OK) {
-                    Log.i(TAG, "NetworkHandler - worker thread - response code != HTTP_OK.");
-                    Message msg = new Message();
-                    msg.what = MessageType.DEVICE_NEW.getValue();
-                    msg.arg1 = 0;
-                    uiHandler.sendMessage(msg);
-                    Log.i(TAG, "NetworkHandler - worker thread - sent message to uiHandler.");
-                    return;
-                }
-
-                Message msg = new Message();
-                msg.what = MessageType.DEVICE_NEW.getValue();
-                msg.arg1 = 1;
-                uiHandler.sendMessage(msg);
-                Log.i(TAG, "NetworkHandler - worker thread - sent message to uiHandler.");
-            }
-        });
-        worker.start();
-        Log.i(TAG, "NetworkHandler - worker thread - worker thread started.");
+        NetworkingWorker worker = new NetworkingWorker(Urls.serverDeviceUrl, "POST");
+        worker.setPayload(Payload.Type.DEVICE_NEW, authentication.token, device)
+                .setHandlerMessageType(MessageType.DEVICE_NEW)
+                .setHandler(uiHandler)
+                .start();
     }
 
     public void getDeviceList() {
 
-        Log.i(TAG, "NetworkHandler - getDeviceList().");
-
-        Thread worker = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-
-                Payload payload = new Payload(Payload.Type.DEVICE_LIST_REQUEST, "token");
-                Log.i(TAG, "NetworkHandler - worker thread - payload created.");
-
-                httpHandler.send(gson.toJson(payload), Urls.serverDeviceUrl, "POST");
-                Log.i(TAG, "NetworkHandler - worker thread - forwarded task to HttpHandler.");
-
-                while (httpHandler.isOngoing()) {
-
-                }
-                Log.i(TAG, "NetworkHandler - worker thread - HttpHandler finished the task.");
-
-                Response response = httpHandler.getResponse();
-                Log.i(TAG, "NetworkHandler - worker thread - retrieved the response.");
-
-                if (response.responseCode != HttpURLConnection.HTTP_OK) {
-                    Log.i(TAG, "NetworkHandler - worker thread - response code != HTTP_OK.");
-                    Message msg = new Message();
-                    msg.what = MessageType.LIST_RELOAD.getValue();
-                    msg.arg1 = 0;
-                    uiHandler.sendMessage(msg);
-                    Log.i(TAG, "NetworkHandler - worker thread - sent message to uiHandler.");
-                    return;
-                }
-
-                Device[] list;
-                try {
-                    list = gson.fromJson(response.responseData, Device[].class);
-                    Log.i(TAG, "NetworkHandler - worker thread - converted received JSON to Device[].");
-                    Message msg = new Message();
-                    msg.what = MessageType.LIST_RELOAD.getValue();
-                    msg.arg1 = 1;
-                    msg.obj = list;
-                    uiHandler.sendMessage(msg);
-                    Log.i(TAG, "NetworkHandler - worker thread - sent message to uiHandler.");
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.e(TAG, e.getMessage());
-
-                }
-            }
-        });
-        worker.start();
-        Log.i(TAG, "NetworkHandler - worker thread - worker thread started.");
+        NetworkingWorker worker = new NetworkingWorker(Urls.serverDeviceUrl, "POST");
+        worker.setPayload(Payload.Type.DEVICE_LIST_REQUEST, authentication.token)
+                .retrieveDataAsObject(Device[].class)
+                .setHandlerMessageType(MessageType.LIST_RELOAD)
+                .setHandler(uiHandler)
+                .start();
     }
 
     public void uploadDeviceList(final ArrayList<Device> list) {

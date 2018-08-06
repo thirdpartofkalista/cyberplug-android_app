@@ -101,12 +101,13 @@ public class DeviceListAdapter extends ArrayAdapter<Device> implements View.OnCl
                 device.setStatus(isChecked);
                 Log.i(TAG, "Switch - toggled for the device with the index: " + position);
 
-                if (networkHandler.updateDeviceStatus(device)) {
-                    Toast.makeText(context, "Device status updated succesfully.", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    Toast.makeText(context, "Encountered an error.", Toast.LENGTH_SHORT).show();
-                }
+//                if (networkHandler.updateDeviceStatus(device)) {
+//                    Toast.makeText(context, "Device status updated succesfully.", Toast.LENGTH_SHORT).show();
+//                }
+//                else {
+//                    Toast.makeText(context, "Encountered an error.", Toast.LENGTH_SHORT).show();
+//                }
+                networkHandler.updateDeviceStatus(device);
 
             }
         });

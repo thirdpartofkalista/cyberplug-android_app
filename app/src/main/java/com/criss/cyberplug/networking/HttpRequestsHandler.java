@@ -33,7 +33,7 @@ public class HttpRequestsHandler {
         public ArrayList<Exception> exceptions;
 
         public Response() {
-
+            this.exceptions = new ArrayList<Exception>();
         }
 
     }
