@@ -57,9 +57,9 @@ public class NetworkHandler {
 
         private Response response;
 
-        private boolean shouldRetrieveDataAsObject = false;
+        private boolean shouldRetrieveDataAsObject;
 
-        private Class messageObjectClass = null;
+        private Class messageObjectClass;
 
 
         public NetworkingWorker(URL url, String method) {
@@ -69,8 +69,16 @@ public class NetworkHandler {
             this.url = url;
             this.method = method;
 
+            this.payload = null;
             this.tasks = new ArrayList<Runnable>();
+            this.httpOkHandler = null;
+            this.httpNotOkHandler = null;
             this.exceptions = new ArrayList<Exception>();
+            this.handler = null;
+            this.handlerMessageType = MessageType.NOT_PROVIDED;
+            this.response = null;
+            this.shouldRetrieveDataAsObject = false;
+            this.messageObjectClass = null;
 
         }
 
@@ -140,10 +148,7 @@ public class NetworkHandler {
 
             logInfo("started.");
 
-            response = null;
-
             Message msg;
-
 
             try {
                 httpHandler.send(gson.toJson(payload), this.url, this.method);
@@ -193,29 +198,38 @@ public class NetworkHandler {
                     }
                     else {
                         logInfo("handling http not ok.");
-                        msg = new Message();
-                        if (handlerMessageType != null) {
-                            logInfo("message type is: " + handlerMessageType.toString() + ".");
-                            msg.what = handlerMessageType.getValue();
-                        }
-                        if (shouldRetrieveDataAsObject) {
-                            logInfo("worker should retrieve data as object.");
-                            try {
-                                msg.obj = gson.fromJson(response.responseData, messageObjectClass);
-                                logInfo("converted data to given object class.");
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                logError(e.getMessage());
-                                exceptions.add(e);
+                        if (handler != null) {
+                            logInfo("handler provided, building and sending the message.");
+                            msg = new Message();
+                            if (handlerMessageType != MessageType.NOT_PROVIDED) {
+                                logInfo("message type is: " + handlerMessageType.toString() + ".");
                             }
+                            else {
+                                logInfo("message type not provided.");
+                            }
+                            msg.what = handlerMessageType.getValue();
+                            if (shouldRetrieveDataAsObject) {
+                                logInfo("worker should retrieve data as object.");
+                                try {
+                                    msg.obj = gson.fromJson(response.responseData, messageObjectClass);
+                                    logInfo("converted data to given object class.");
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    logError(e.getMessage());
+                                    exceptions.add(e);
+                                }
+                            }
+                            msg.arg1 = MessageArg.FAIL.getValue();
+                            handler.sendMessage(msg);
+                            logInfo("sent message to handler.");
                         }
-                        msg.arg1 = MessageArg.FAIL.getValue();
-                        handler.sendMessage(msg);
-                        logInfo("sent message to handler.");
+                        else {
+                            logInfo("handler not provided.");
+                        }
                     }
                 }
                 else {
-                    logInfo("response is HTTP_OK.");
+                    logInfo("response code is HTTP_OK.");
                     if (httpOkHandler != null) {
                         logInfo("using the provided httpOkHandler.");
                         Thread tempWorker = new Thread(httpNotOkHandler);
@@ -232,40 +246,52 @@ public class NetworkHandler {
                     }
                     else {
                         logInfo("handling http ok.");
-                        msg = new Message();
-                        if (handlerMessageType != null) {
-                            logInfo("message type is: " + handlerMessageType.toString() + ".");
-                            msg.what = handlerMessageType.getValue();
-                        }
-                        if (shouldRetrieveDataAsObject) {
-                            logInfo("worker should retrieve data as object.");
-                            try {
-                                msg.obj = gson.fromJson(response.responseData, messageObjectClass);
-                                logInfo("converted data to given object class.");
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                logError(e.getMessage());
-                                exceptions.add(e);
+                        if (handler != null) {
+                            logInfo("handler provided, building and sending the message.");
+                            msg = new Message();
+                            if (handlerMessageType != MessageType.NOT_PROVIDED) {
+                                logInfo("message type is: " + handlerMessageType.toString() + ".");
+                                msg.what = handlerMessageType.getValue();
                             }
+                            if (shouldRetrieveDataAsObject) {
+                                logInfo("worker should retrieve data as object.");
+                                try {
+                                    msg.obj = gson.fromJson(response.responseData, messageObjectClass);
+                                    logInfo("converted data to given object class.");
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    logError(e.getMessage());
+                                    exceptions.add(e);
+                                }
+                            }
+                            msg.arg1 = MessageArg.SUCCES.getValue();
+                            handler.sendMessage(msg);
+                            logInfo("sent message to handler.");
                         }
-                        msg.arg1 = MessageArg.SUCCES.getValue();
-                        handler.sendMessage(msg);
-                        logInfo("sent message to handler.");
+                        else {
+                            logInfo("handler not provided.");
+                        }
                     }
                 }
 
             }
             else {
                 logInfo("no response.");
-                msg = new Message();
-                if (handlerMessageType != null) {
-                    logInfo("message type is: " + handlerMessageType.toString() + ".");
-                    msg.what = handlerMessageType.getValue();
+                if (handler != null) {
+                    msg = new Message();
+                    if (handlerMessageType != null) {
+                        logInfo("message type is: " + handlerMessageType.toString() + ".");
+                        msg.what = handlerMessageType.getValue();
+                    }
+                    msg.arg1 = MessageArg.NO_RESPONSE.getValue();
+                    handler.sendMessage(msg);
+                    logInfo("sent message to handler.");
                 }
-                msg.arg1 = MessageArg.NO_RESPONSE.getValue();
-                handler.sendMessage(msg);
-                logInfo("sent message to handler.");
+                else {
+                    logInfo("handler not provided.");
+                }
             }
+            logInfo("finished.");
         }
     }
 
@@ -291,8 +317,8 @@ public class NetworkHandler {
 
         NetworkingWorker worker = new NetworkingWorker(Urls.serverDeviceUrl, "POST");
         worker.setPayload(Payload.Type.DEVICE_NEW, authentication.token, device)
-                .setHandlerMessageType(MessageType.DEVICE_NEW)
-                .setHandler(uiHandler)
+//                .setHandlerMessageType(MessageType.DEVICE_NEW)
+//                .setHandler(uiHandler)
                 .start();
     }
 

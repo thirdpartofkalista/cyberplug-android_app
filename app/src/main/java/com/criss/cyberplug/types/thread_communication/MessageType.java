@@ -1,6 +1,7 @@
 package com.criss.cyberplug.types.thread_communication;
 
 public enum MessageType {
+    NOT_PROVIDED(-1),
     LIST_RELOAD(0),
     LIST_UPDATE_UI(1),
     DEVICE_NEW(2),
@@ -19,6 +20,8 @@ public enum MessageType {
     @Override
     public String toString() {
         switch(this) {
+            case NOT_PROVIDED:
+                return "NOT_PROVIDED";
             case LIST_RELOAD:
                 return "LIST_RELOAD";
             case LIST_UPDATE_UI:
