@@ -35,4 +35,6 @@ public class GroupListAdapter extends ArrayAdapter<Group> implements View.OnClic
         // TODO: 03.08.2018
         return null;
     }
+
+    // TODO: 06.08.2018 add logging and do the list adapter
 }

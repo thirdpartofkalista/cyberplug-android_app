@@ -42,11 +42,12 @@ public class DeviceListAdapter extends ArrayAdapter<Device> implements View.OnCl
         super(context, R.layout.device_item, data);
         this.context = context;
         this.networkHandler = networkHandler;
+        Log.i(TAG, "DeviceListAdapter - instance created.");
     }
 
 
     @Override
-    public View getView(int position, View view, ViewGroup parent) {
+    public View getView(final int position, View view, ViewGroup parent) {
 
 //        Get the data item for this position
         final Device device = getItem(position);
@@ -98,7 +99,7 @@ public class DeviceListAdapter extends ArrayAdapter<Device> implements View.OnCl
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
 
                 device.setStatus(isChecked);
-                Log.i(TAG, "switch toggled");
+                Log.i(TAG, "Switch - toggled for the device with the index: " + position);
 
                 if (networkHandler.updateDeviceStatus(device)) {
                     Toast.makeText(context, "Device status updated succesfully.", Toast.LENGTH_SHORT).show();
@@ -116,7 +117,8 @@ public class DeviceListAdapter extends ArrayAdapter<Device> implements View.OnCl
                 // TODO: 03.08.2018 launch the device settings activity for this device
             }
         });
-        
+
+        Log.i(TAG, "DeviceListAdapter - return view.");
         return view;
     }
 }

@@ -55,19 +55,25 @@ public class HttpRequestsHandler {
 
     public HttpRequestsHandler() {
         this.response = new Response();
+        Log.i(TAG, "HttpRequestHandler - instance created.");
     }
 
     private HttpURLConnection getConnection(URL url, String method, String[] requestProperty, boolean doInput, boolean doOutput) throws IOException {
 
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        Log.i(TAG, "HttpUrlConnection - opened connection.");
 
         conn.setRequestMethod(method);
+        Log.i(TAG, "HttpUrlConnection - set method: " + method);
 
         conn.setRequestProperty(requestProperty[0], requestProperty[1]);
+        Log.i(TAG, "HttpUrlConnection - set request property: " + requestProperty[0] + ", " + requestProperty[1]);
 
         conn.setDoInput(doInput);
+        Log.i(TAG, "HttpUrlConnection - set do input: " + doInput);
 
         conn.setDoOutput(doOutput);
+        Log.i(TAG, "HttpUrlConnection - set do output: " + doOutput);
 
         return conn;
     }
@@ -75,32 +81,36 @@ public class HttpRequestsHandler {
     private void writeStream(HttpURLConnection conn, String json) throws IOException {
 
         DataOutputStream writer = new DataOutputStream(conn.getOutputStream());
-
-        Log.i(TAG, "writer init");
+        Log.i(TAG, "Writer - initialized.");
 
         writer.writeBytes(json);
-        Log.i(TAG, "wrote:" + json);
+        Log.i(TAG, "Writer - wrote: " + json);
 
         writer.flush();
-        Log.i(TAG, "flush");
+        Log.i(TAG, "Writer - flush");
 
         writer.close();
-        Log.i(TAG, "writer close");
+        Log.i(TAG, "Writer - closed.");
     }
 
     private String readStream(HttpURLConnection conn) throws IOException {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        Log.i(TAG, "Reader - initialized.");
 
         String line;
 
         StringBuilder result = new StringBuilder();
+        Log.i(TAG, "String builder - initialized.");
 
         while ((line = reader.readLine()) != null) {
             result.append(line);
+            Log.i(TAG, "Line - read: " + line);
         }
+        Log.i(TAG, "Reader - read: " + result.toString());
 
         reader.close();
+        Log.i(TAG, "Reader - closed.");
 
         return result.toString();
     }
@@ -111,23 +121,32 @@ public class HttpRequestsHandler {
     public Response sendGet(final String json) {
 
         response.reset();
+        Log.i(TAG, "Response - reset.");
 
         this.networkingThread = new Thread(new Runnable() {
             @Override
             public void run() {
 
                 HttpURLConnection conn = null;
+                Log.i(TAG, "HttpHandler Thread - started.");
 
                 try {
 
                     conn = getConnection(Urls.serverDeviceUrl, "GET", new String[]{"Content-type", "application/json"}, true, true);
+                    Log.i(TAG, "HttpHandler Thread - retrieved connection.");
                     conn.connect();
+                    Log.i(TAG, "HttpHandler Thread - connected.");
 
                     writeStream(conn, json);
+                    Log.i(TAG, "HttpHandler Thread - writeStream() succesful.");
 
                     response.responseCode = conn.getResponseCode();
+                    Log.i(TAG, "HttpHandler Thread - retrieved response code.");
                     response.responseMessage = conn.getResponseMessage();
+                    Log.i(TAG, "HttpHandler Thread - retrieved response message.");
                     response.responseData = readStream(conn);
+                    Log.i(TAG, "HttpHandler Thread - readStream() succesful.");
+                    Log.i(TAG, "HttpHandler Thread - retrieved response data.");
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -135,6 +154,7 @@ public class HttpRequestsHandler {
                 } finally {
                     try {
                         conn.disconnect();
+                        Log.i(TAG, "HttpHandler Thread - disconnected.");
                     } catch (Exception e) {
                         e.printStackTrace();
                         response.hadError = true;
@@ -146,47 +166,50 @@ public class HttpRequestsHandler {
             }
         });
         this.networkingThread.start();
+        Log.i(TAG, "HttpHandler Thread - starting.");
         return response;
     }
 
 //    Method that sends a json as a POST request
     public boolean sendPost(final String json) {
 
-//        response.reset();
+        response.reset();
+        Log.i(TAG, "Response - reset.");
 
         this.networkingThread = new Thread(new Runnable() {
             @Override
             public void run() {
 
                 HttpURLConnection conn = null;
-
-                Log.i(TAG, "init conn");
+                Log.i(TAG, "HttpHandler Thread - started.");
 
                 try {
 
                     conn = getConnection(Urls.serverDeviceUrl, "POST", new String[]{"Content-type", "application/json"}, true, true);
-                    Log.i(TAG, "getConnection() succesful");
+                    Log.i(TAG, "HttpHandler Thread - retrieved connection.");
                     conn.connect();
-                    Log.i(TAG, "connect() succesful");
+                    Log.i(TAG, "HttpHandler Thread - connected.");
 
                     writeStream(conn, json);
-                    Log.i(TAG, "writeStream() succesful");
+                    Log.i(TAG, "HttpHandler Thread - writeStream() succesful.");
 
                     response.responseCode = conn.getResponseCode();
+                    Log.i(TAG, "HttpHandler Thread - retrieved response code.");
                     response.responseMessage = conn.getResponseMessage();
+                    Log.i(TAG, "HttpHandler Thread - retrieved response message.");
                     response.responseData = readStream(conn);
+                    Log.i(TAG, "HttpHandler Thread - readStream() succesful.");
+                    Log.i(TAG, "HttpHandler Thread - retrieved response data.");
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Log.e(TAG, e.getMessage());
-                    response.hadError = true;
+//                    response.hadError = true;
                 } finally {
                     try {
                         conn.disconnect();
-                        Log.i(TAG, "disconnect() succesful");
+                        Log.i(TAG, "HttpHandler Thread - disconnected.");
                     } catch (Exception e) {
                         e.printStackTrace();
-                        Log.e(TAG, e.getMessage());
                         response.hadError = true;
                     } finally {
 //                        response.markAsFinished();
@@ -196,7 +219,7 @@ public class HttpRequestsHandler {
             }
         });
         this.networkingThread.start();
-        Log.i(TAG, "Thread started");
+        Log.i(TAG, "HttpHandler Thread - starting.");
         return true;
     }
 
@@ -208,6 +231,7 @@ public class HttpRequestsHandler {
     }
 
     public Response getResponse() {
+        Log.i(TAG, "HttpHandler - retrieve response");
         return response;
     }
 
