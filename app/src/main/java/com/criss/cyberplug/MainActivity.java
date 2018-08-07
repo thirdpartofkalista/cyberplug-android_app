@@ -143,6 +143,14 @@ public class MainActivity extends AppCompatActivity {
 //    ----------------------------------------------------------------------------
 //    ----------------------------------------------------------------------------
 
+    public void makeShortToast(String text) {
+        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+    }
+
+    public void makeLongToast(String text) {
+        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+    }
+
 
 
 //    ----------------------------------------------
@@ -157,12 +165,78 @@ public class MainActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
 
+            NetworkHandler.MessagePayload payload = (NetworkHandler.MessagePayload) msg.obj;
+
+            boolean nullPayload = payload == null;
+
+/*
+            Template:
+            if (msg.what == MessageType.SOMETHING.getValue()) {
+                if (!nullPayload) {
+                    if (!(payload.exceptions.size() > 0)) {
+                        if (payload.data != null) {
+//                            do something
+                        }
+                        else {
+//                            do something
+                        }
+                    }
+                    else {
+//                        handle exceptions
+                    }
+                }
+            }
+*/
+
+            if (msg.what == MessageType.NOT_PROVIDED.getValue()) {
+                if (!nullPayload) {
+                    if (payload.exceptions.size() > 0) {
+//                        for (int i = 0; i < payload.exceptions.size(); i++) {
+//
+//                        }
+                        makeShortToast("Encountered an error.");
+                    }
+                }
+            }
+
             if (msg.what == MessageType.LIST_RELOAD.getValue()) {
-                reloadList((Device[]) msg.obj);
+                if (!nullPayload) {
+                    if (!(payload.exceptions.size() > 0)) {
+                        if (payload.data != null) {
+                            makeShortToast("Received the list.");
+                            reloadList((Device[]) payload.data);
+                        }
+                        else {
+                            makeShortToast("The list is empty.");
+                        }
+                    }
+                }
             }
 
             if (msg.what == MessageType.LIST_UPDATE_UI.getValue()) {
                 updateListUi();
+            }
+
+            if (msg.what == MessageType.DEVICE_NEW.getValue()) {
+                if (!nullPayload) {
+                    if (!(payload.exceptions.size() > 0)) {
+                        makeShortToast("Device added succesfully on the server.");
+                    }
+                    else {
+//                        handle exceptions
+                    }
+                }
+            }
+
+            if (msg.what == MessageType.DEVICE_UPDATE_STATUS.getValue()) {
+                if (!nullPayload) {
+                    if (!(payload.exceptions.size() > 0)) {
+                        makeShortToast("Device status succesfully changed.");
+                    }
+                    else {
+//                        handle exceptions
+                    }
+                }
             }
 
         }
@@ -183,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
-            Toast.makeText(getApplicationContext(), "works", Toast.LENGTH_LONG).show();
+            makeShortToast(menuItem.getTitle().toString());
 
             int id = menuItem.getItemId();
 
@@ -202,12 +276,12 @@ public class MainActivity extends AppCompatActivity {
 
                 case R.id.about_button:
                     Intent a = new Intent(/*getApplication(), AboutActivity.class*/);
-                    startActivity(a);
+//                    startActivity(a);
                     break;
 
                 case R.id.help_button:
                     Intent b = new Intent(/*getApplication(), AboutActivity.class*/);
-                    startActivity(b);
+//                    startActivity(b);
                     break;
 
                 case R.id.log_out_button:
@@ -248,11 +322,11 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.select_menu_button:
-                Toast.makeText(getApplicationContext(), "tadaa", Toast.LENGTH_SHORT).show();
+                makeShortToast("select");
                 break;
 
             case R.id.select_all_menu_button:
-                Toast.makeText(getApplicationContext(), "tadaa 2", Toast.LENGTH_SHORT).show();
+                makeShortToast("select all");
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -286,7 +360,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
             if (resultCode == Activity.RESULT_CANCELED) {
-                Toast.makeText(getApplicationContext(), "No device added", Toast.LENGTH_LONG).show();
+                makeLongToast("No device added.");
             }
         }
 

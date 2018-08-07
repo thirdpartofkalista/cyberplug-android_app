@@ -32,6 +32,20 @@ public class NetworkHandler {
     private final Authentication authentication;
 
 
+    public class MessagePayload {
+
+        public ArrayList<Exception> exceptions;
+
+        public Object data;
+
+        public MessagePayload() {
+            this.exceptions = new ArrayList<Exception>();
+            this.data = null;
+        }
+
+    }
+
+
     private class NetworkingWorker extends Thread {
 
         private static final String TAG = "Networking worker";
@@ -148,7 +162,9 @@ public class NetworkHandler {
 
             logInfo("started.");
 
-            Message msg;
+            Message msg = new Message();
+
+            MessagePayload msgPayload = new MessagePayload();
 
             try {
                 httpHandler.send(gson.toJson(payload), this.url, this.method);
@@ -200,7 +216,6 @@ public class NetworkHandler {
                         logInfo("handling http not ok.");
                         if (handler != null) {
                             logInfo("handler provided, building and sending the message.");
-                            msg = new Message();
                             if (handlerMessageType != MessageType.NOT_PROVIDED) {
                                 logInfo("message type is: " + handlerMessageType.toString() + ".");
                             }
@@ -211,7 +226,7 @@ public class NetworkHandler {
                             if (shouldRetrieveDataAsObject) {
                                 logInfo("worker should retrieve data as object.");
                                 try {
-                                    msg.obj = gson.fromJson(response.responseData, messageObjectClass);
+                                    msgPayload.data = gson.fromJson(response.responseData, messageObjectClass);
                                     logInfo("converted data to given object class.");
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -220,6 +235,8 @@ public class NetworkHandler {
                                 }
                             }
                             msg.arg1 = MessageArg.FAIL.getValue();
+                            msgPayload.exceptions = exceptions;
+                            msg.obj = msgPayload;
                             handler.sendMessage(msg);
                             logInfo("sent message to handler.");
                         }
@@ -248,7 +265,6 @@ public class NetworkHandler {
                         logInfo("handling http ok.");
                         if (handler != null) {
                             logInfo("handler provided, building and sending the message.");
-                            msg = new Message();
                             if (handlerMessageType != MessageType.NOT_PROVIDED) {
                                 logInfo("message type is: " + handlerMessageType.toString() + ".");
                                 msg.what = handlerMessageType.getValue();
@@ -256,7 +272,7 @@ public class NetworkHandler {
                             if (shouldRetrieveDataAsObject) {
                                 logInfo("worker should retrieve data as object.");
                                 try {
-                                    msg.obj = gson.fromJson(response.responseData, messageObjectClass);
+                                    msgPayload.data = gson.fromJson(response.responseData, messageObjectClass);
                                     logInfo("converted data to given object class.");
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -265,6 +281,8 @@ public class NetworkHandler {
                                 }
                             }
                             msg.arg1 = MessageArg.SUCCES.getValue();
+                            msgPayload.exceptions = exceptions;
+                            msg.obj = msgPayload;
                             handler.sendMessage(msg);
                             logInfo("sent message to handler.");
                         }
@@ -278,12 +296,13 @@ public class NetworkHandler {
             else {
                 logInfo("no response.");
                 if (handler != null) {
-                    msg = new Message();
                     if (handlerMessageType != null) {
                         logInfo("message type is: " + handlerMessageType.toString() + ".");
                         msg.what = handlerMessageType.getValue();
                     }
                     msg.arg1 = MessageArg.NO_RESPONSE.getValue();
+                    msgPayload.exceptions = exceptions;
+                    msg.obj = msgPayload;
                     handler.sendMessage(msg);
                     logInfo("sent message to handler.");
                 }
@@ -317,8 +336,8 @@ public class NetworkHandler {
 
         NetworkingWorker worker = new NetworkingWorker(Urls.serverDeviceUrl, "POST");
         worker.setPayload(Payload.Type.DEVICE_NEW, authentication.token, device)
-//                .setHandlerMessageType(MessageType.DEVICE_NEW)
-//                .setHandler(uiHandler)
+                .setHandlerMessageType(MessageType.DEVICE_NEW)
+                .setHandler(uiHandler)
                 .start();
     }
 
