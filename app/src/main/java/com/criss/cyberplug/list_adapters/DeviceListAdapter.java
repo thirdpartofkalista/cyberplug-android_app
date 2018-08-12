@@ -1,6 +1,9 @@
 package com.criss.cyberplug.list_adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Message;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +14,17 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
+import com.criss.cyberplug.DeviceSettings;
 import com.criss.cyberplug.R;
 import com.criss.cyberplug.networking.NetworkHandler;
+import com.criss.cyberplug.types.intents.RequestCode;
 import com.criss.cyberplug.types.list.Device;
 import com.criss.cyberplug.types.list.DeviceViewHolder;
+import com.criss.cyberplug.types.thread_communication.MessageType;
 
 import java.util.ArrayList;
+
+import static android.support.v4.app.ActivityCompat.startActivityForResult;
 
 public class DeviceListAdapter extends ArrayAdapter<Device> implements View.OnClickListener{
 
@@ -32,16 +40,19 @@ public class DeviceListAdapter extends ArrayAdapter<Device> implements View.OnCl
 
     private NetworkHandler networkHandler;
 
+    private Handler uiHandler;
+
 
     @Override
     public void onClick(View view) {
 
     }
 
-    public DeviceListAdapter(ArrayList<Device> data, Context context, NetworkHandler networkHandler) {
+    public DeviceListAdapter(ArrayList<Device> data, Context context, NetworkHandler networkHandler, Handler handler) {
         super(context, R.layout.device_item, data);
         this.context = context;
         this.networkHandler = networkHandler;
+        this.uiHandler = handler;
         Log.i(TAG, "DeviceListAdapter - instance created.");
     }
 
@@ -116,6 +127,10 @@ public class DeviceListAdapter extends ArrayAdapter<Device> implements View.OnCl
             @Override
             public void onClick(View view) {
                 // TODO: 03.08.2018 launch the device settings activity for this device
+                Message msg = new Message();
+                msg.what = MessageType.DEVICE_SETTINGS.getValue();
+                msg.arg1 = position;
+                uiHandler.sendMessage(msg);
             }
         });
 

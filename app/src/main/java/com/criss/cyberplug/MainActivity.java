@@ -26,7 +26,7 @@ import android.widget.Toast;
 import com.criss.cyberplug.constants.Authentication;
 import com.criss.cyberplug.types.thread_communication.MessageType;
 import com.criss.cyberplug.constants.Preferences;
-import com.criss.cyberplug.types.networking.RequestCode;
+import com.criss.cyberplug.types.intents.RequestCode;
 import com.criss.cyberplug.list_adapters.DeviceListAdapter;
 import com.criss.cyberplug.list_adapters.GroupListAdapter;
 import com.criss.cyberplug.networking.NetworkHandler;
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
         groups = new ArrayList<>();
 
-        deviceListAdapter = new DeviceListAdapter(devices, getApplicationContext(), networkHandler);
+        deviceListAdapter = new DeviceListAdapter(devices, getApplicationContext(), networkHandler, uiHandler);
 
         groupListAdapter = new GroupListAdapter(groups, getApplicationContext(), networkHandler);
 
@@ -236,6 +236,14 @@ public class MainActivity extends AppCompatActivity {
                     else {
 //                        handle exceptions
                     }
+                }
+            }
+
+            if (msg.what == MessageType.DEVICE_SETTINGS.getValue()) {
+                if (!nullPayload) {
+                    Intent intent = new Intent(getApplicationContext(), DeviceSettings.class);
+                    intent.putExtra("index", msg.arg1);
+                    startActivityForResult(intent, RequestCode.DEVICE_SETTINGS.getValue());
                 }
             }
 

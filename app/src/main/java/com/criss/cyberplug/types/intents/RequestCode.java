@@ -1,4 +1,4 @@
-package com.criss.cyberplug.types.networking;
+package com.criss.cyberplug.types.intents;
 
 public enum RequestCode {
     ADD_NEW_DEVICE(0),
