@@ -8,5 +8,5 @@ public class GroupViewHolder {
 
     public TextView groupName;
     public Switch groupSwitch;
-    public Button settingButton;
+    public Button settingsButton;
 }

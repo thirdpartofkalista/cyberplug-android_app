@@ -6,7 +6,8 @@ public enum MessageType {
     LIST_UPDATE_UI(1),
     DEVICE_NEW(2),
     DEVICE_UPDATE_STATUS(3),
-    DEVICE_SETTINGS(4);
+    DEVICE_SETTINGS(4),
+    GROUP_SETTINGS(5);
 
     private final int value;
 

@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
         deviceListAdapter = new DeviceListAdapter(devices, getApplicationContext(), networkHandler, uiHandler);
 
-        groupListAdapter = new GroupListAdapter(groups, getApplicationContext(), networkHandler);
+        groupListAdapter = new GroupListAdapter(groups, getApplicationContext(), networkHandler, uiHandler);
 
         requestDeviceList();
 

@@ -25,4 +25,13 @@ public class Group {
     public boolean getStatus() {
         return status;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
 }
