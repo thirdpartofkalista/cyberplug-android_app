@@ -112,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
         networkHandler.getDeviceList();
     }
 
+
 //    Updates the list ui
     private void updateListUi() {
 
@@ -240,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             if (msg.what == MessageType.DEVICE_SETTINGS.getValue()) {
-                if (!nullPayload) {
+                if (true) {
                     Intent intent = new Intent(getApplicationContext(), DeviceSettings.class);
                     intent.putExtra("index", msg.arg1);
                     startActivityForResult(intent, RequestCode.DEVICE_SETTINGS.getValue());
@@ -374,6 +375,10 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == RequestCode.DEVICE_SETTINGS.getValue()) {
             // TODO: 06.08.2018 device settings
+            if (data.getBooleanExtra("delete", false)) {
+                devices.remove(data.getIntExtra("index", 0));
+                updateListUi();
+            }
         }
 
         if (requestCode == RequestCode.APP_SETTINGS.getValue()) {

@@ -2,8 +2,8 @@ package com.criss.cyberplug.list_adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Message;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +12,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
-import android.widget.Toast;
 
 import com.criss.cyberplug.DeviceSettings;
 import com.criss.cyberplug.R;
@@ -131,6 +130,7 @@ public class DeviceListAdapter extends ArrayAdapter<Device> implements View.OnCl
                 msg.what = MessageType.DEVICE_SETTINGS.getValue();
                 msg.arg1 = position;
                 uiHandler.sendMessage(msg);
+
             }
         });
 
