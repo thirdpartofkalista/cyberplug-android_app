@@ -323,7 +323,6 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View view) {
         if (lastPlace == 0){
             Intent mIntent = new Intent(getApplication(), AddDeviceActivity.class);
-            mIntent.putExtra("key", preferences.getUserName());
             startActivityForResult(mIntent, RequestCode.ADD_NEW_DEVICE.getValue());
         }
         else if (lastPlace == 1){
@@ -376,17 +375,31 @@ public class MainActivity extends AppCompatActivity {
 
             if(resultCode == Activity.RESULT_OK){
 
-                Device device = new Device(devices.size() + 1, data.getStringExtra("name"), false, true);
-
-                devices.add(device);
-
-                networkHandler.addDevice(device);
-
-                updateListUi();
-
+//                Device device = new Device(devices.size() + 1, data.getStringExtra("name"), false, true);
+//
+//                devices.add(device);
+//
+//                networkHandler.addDevice(device);
+//
+//                updateListUi();
+                Intent mIntent = new Intent(getApplication(), ConfigureDevice.class);
+                mIntent.putExtra("key", preferences.getUserName());
+                startActivityForResult(mIntent, RequestCode.CONFIGURE_DEVICE.getValue());
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 makeLongToast("No device added.");
+            }
+        }
+
+        if (requestCode == RequestCode.CONFIGURE_DEVICE.getValue()) {
+
+            if (resultCode == Activity.RESULT_OK) {
+
+                String deviceName = data.getStringExtra("name");
+                makeShortToast(deviceName);
+
+                networkHandler.addDevice(new Device(deviceName));
+
             }
         }
 

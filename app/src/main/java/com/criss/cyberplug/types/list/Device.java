@@ -9,11 +9,8 @@ public class Device {
     @Expose private boolean status;
     @Expose(serialize = false) private boolean isOnline;
 
-    public Device(int id, String name, boolean status, boolean isOnline) {
-        this.id = id;
+    public Device(String name) {
         this.name = name;
-        this.status = status;
-        this.isOnline = isOnline;
     }
 
     public int getId() {

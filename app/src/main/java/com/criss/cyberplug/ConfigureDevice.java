@@ -2,23 +2,21 @@ package com.criss.cyberplug;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.wifi.WifiManager;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.support.v7.widget.Toolbar;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
-
-import javax.net.ssl.HttpsURLConnection;
 
 public class ConfigureDevice extends AppCompatActivity {
 
@@ -52,7 +50,7 @@ public class ConfigureDevice extends AppCompatActivity {
 
         String mWifiName = wifiName.getText().toString();
         String mWifiPassword = wifiPassword.getText().toString();
-        String mDeviceName = deviceName.getText().toString();
+        final String mDeviceName = deviceName.getText().toString();
 
         String mKey = null;
 
@@ -82,17 +80,21 @@ public class ConfigureDevice extends AppCompatActivity {
 
                     conn.disconnect();
 
+                    WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(getApplicationContext().WIFI_SERVICE);
+                    wifiManager.disconnect();
+                    wifiManager.reconnect();
+
+                    Intent intention = new Intent();
+                    intention.putExtra("name", mDeviceName);
+
+                    setResult(Activity.RESULT_OK, intention);
+                    finish();
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         });
-
-        Intent intention = new Intent();
-        intention.putExtra("name", mDeviceName);
-
-        setResult(Activity.RESULT_OK, intention);
-        finish();
 
     }
 }
