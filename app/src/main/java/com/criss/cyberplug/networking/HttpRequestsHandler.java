@@ -2,7 +2,7 @@ package com.criss.cyberplug.networking;
 
 import android.util.Log;
 
-import com.criss.cyberplug.constants.Urls;
+import com.criss.cyberplug.constants.EndPoints;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -45,7 +45,7 @@ public class HttpRequestsHandler {
         Log.i(TAG, "HttpRequestHandler - instance created.");
     }
 
-    private HttpURLConnection getConnection(URL url, String method, String[] requestProperty, boolean doInput, boolean doOutput) throws IOException {
+    private HttpURLConnection getConnection(URL url, String method, /*String[] requestProperty,*/ boolean doInput, boolean doOutput, String token) throws IOException {
 
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         Log.i(TAG, "HttpUrlConnection - opened connection.");
@@ -53,8 +53,9 @@ public class HttpRequestsHandler {
         conn.setRequestMethod(method);
         Log.i(TAG, "HttpUrlConnection - set method: " + method);
 
-        conn.setRequestProperty(requestProperty[0], requestProperty[1]);
-        Log.i(TAG, "HttpUrlConnection - set request property: " + requestProperty[0] + ", " + requestProperty[1]);
+        conn.setRequestProperty("Content-type", "application/json");
+        conn.setRequestProperty("Authentication", "Bearer " + token);
+//        Log.i(TAG, "HttpUrlConnection - set request property: " + requestProperty[0] + ", " + requestProperty[1]);
 
         conn.setDoInput(doInput);
         Log.i(TAG, "HttpUrlConnection - set do input: " + doInput);
@@ -104,7 +105,56 @@ public class HttpRequestsHandler {
 
 
 //    Method that sends a json
-    public boolean send(final String json, final URL url, final String method) {
+    public boolean send(final String json, final EndPoints.EndPoint endPoint, final String token) {
+
+        this.networkingThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                HttpURLConnection conn = null;
+                Log.i(TAG, "HttpHandler Thread - started.");
+
+                Log.i(TAG, endPoint.url + endPoint.method);
+                try {
+
+                    conn = getConnection(endPoint.url, endPoint.method, /*new String[]{"Content-type", "application/json"},*/ true, true, token);
+                    Log.i(TAG, "HttpHandler Thread - retrieved connection.");
+                    conn.connect();
+                    Log.i(TAG, "HttpHandler Thread - connected.");
+
+                    writeStream(conn, json);
+                    Log.i(TAG, "HttpHandler Thread - writeStream() succesful.");
+
+                    response.responseCode = conn.getResponseCode();
+                    Log.i(TAG, "HttpHandler Thread - retrieved response code.");
+                    response.responseMessage = conn.getResponseMessage();
+                    Log.i(TAG, "HttpHandler Thread - retrieved response message.");
+                    response.responseData = readStream(conn);
+                    Log.i(TAG, "HttpHandler Thread - readStream() succesful.");
+                    Log.i(TAG, "HttpHandler Thread - retrieved response data.");
+
+                } catch (Exception e) {
+                    Log.e(TAG, e.getMessage());
+                    response.exceptions.add(e);
+                } finally {
+                    try {
+                        conn.disconnect();
+                        Log.i(TAG, "HttpHandler Thread - disconnected.");
+                    } catch (Exception e) {
+                        Log.e(TAG, e.getMessage());
+                        response.exceptions.add(e);
+                    }
+                }
+
+            }
+        });
+        this.networkingThread.start();
+        Log.i(TAG, "HttpHandler Thread - starting.");
+        return true;
+    }
+
+//    Method that sends a request without a payload
+    public boolean send(final EndPoints.EndPoint endPoint, final String token) {
 
         this.networkingThread = new Thread(new Runnable() {
             @Override
@@ -115,13 +165,10 @@ public class HttpRequestsHandler {
 
                 try {
 
-                    conn = getConnection(Urls.serverDeviceUrl, method, new String[]{"Content-type", "application/json"}, true, true);
+                    conn = getConnection(endPoint.url, endPoint.method, /*new String[]{"Content-type", "application/json"},*/ true, true, token);
                     Log.i(TAG, "HttpHandler Thread - retrieved connection.");
                     conn.connect();
                     Log.i(TAG, "HttpHandler Thread - connected.");
-
-                    writeStream(conn, json);
-                    Log.i(TAG, "HttpHandler Thread - writeStream() succesful.");
 
                     response.responseCode = conn.getResponseCode();
                     Log.i(TAG, "HttpHandler Thread - retrieved response code.");

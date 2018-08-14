@@ -4,8 +4,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.criss.cyberplug.constants.Authentication;
-import com.criss.cyberplug.constants.Urls;
+import com.criss.cyberplug.constants.CredsPair;
+import com.criss.cyberplug.constants.EndPoints;
 import com.criss.cyberplug.networking.HttpRequestsHandler.Response;
 import com.criss.cyberplug.types.list.Device;
 import com.criss.cyberplug.types.thread_communication.MessageArg;
@@ -13,8 +13,6 @@ import com.criss.cyberplug.types.thread_communication.MessageType;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -29,7 +27,7 @@ public class NetworkHandler {
 
     private Handler uiHandler;
 
-    private final Authentication authentication;
+    private final String token;
 
 
     public class MessagePayload {
@@ -50,12 +48,9 @@ public class NetworkHandler {
 
         private static final String TAG = "Networking worker";
 
-        private URL url;
+        private EndPoints.EndPoint endPoint;
 
-        private String method;
-
-
-        private Payload payload;
+        private Object payload;
 
         private ArrayList<Runnable> tasks;
 
@@ -73,15 +68,16 @@ public class NetworkHandler {
 
         private boolean shouldRetrieveDataAsObject;
 
+        private boolean shouldRetrieveDataAsString;
+
         private Class messageObjectClass;
 
 
-        public NetworkingWorker(URL url, String method) {
+        public NetworkingWorker(EndPoints.EndPoint endPoint) {
 
             super();
 
-            this.url = url;
-            this.method = method;
+            this.endPoint = endPoint;
 
             this.payload = null;
             this.tasks = new ArrayList<Runnable>();
@@ -92,6 +88,7 @@ public class NetworkHandler {
             this.handlerMessageType = MessageType.NOT_PROVIDED;
             this.response = null;
             this.shouldRetrieveDataAsObject = false;
+            this.shouldRetrieveDataAsString = false;
             this.messageObjectClass = null;
 
         }
@@ -109,18 +106,8 @@ public class NetworkHandler {
         }
 
 
-        public NetworkingWorker setPayload(Payload payload) {
+        public NetworkingWorker setPayload(Object payload) {
             this.payload = payload;
-            return this;
-        }
-
-        public NetworkingWorker setPayload(Payload.Type type, String token) {
-            this.payload = new Payload(type, token);
-            return this;
-        }
-
-        public NetworkingWorker setPayload(Payload.Type type, String token, Object data) {
-            this.payload = new Payload(type, token, data);
             return this;
         }
 
@@ -155,6 +142,11 @@ public class NetworkHandler {
             return this;
         }
 
+        public NetworkingWorker retrieveDataAsString() {
+            this.shouldRetrieveDataAsString = true;
+            return this;
+        }
+
 
         @Override
         public void run() {
@@ -167,7 +159,12 @@ public class NetworkHandler {
             MessagePayload msgPayload = new MessagePayload();
 
             try {
-                httpHandler.send(gson.toJson(payload), this.url, this.method);
+                if (payload == null) {
+                    httpHandler.send(endPoint, token);
+                }
+                else {
+                    httpHandler.send(gson.toJson(payload), endPoint, token);
+                }
                 logInfo("passed request to httpHandler.");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -234,6 +231,16 @@ public class NetworkHandler {
                                     exceptions.add(e);
                                 }
                             }
+                            else if (shouldRetrieveDataAsString) {
+                                try {
+                                    msgPayload.data = response.responseData;
+                                    logInfo("retrieved data as String.");
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    logError(e.getMessage());
+                                    exceptions.add(e);
+                                }
+                            }
                             msg.arg1 = MessageArg.FAIL.getValue();
                             msgPayload.exceptions = exceptions;
                             msg.obj = msgPayload;
@@ -280,6 +287,16 @@ public class NetworkHandler {
                                     exceptions.add(e);
                                 }
                             }
+                            else if (shouldRetrieveDataAsString) {
+                                try {
+                                    msgPayload.data = response.responseData;
+                                    logInfo("retrieved data as String.");
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    logError(e.getMessage());
+                                    exceptions.add(e);
+                                }
+                            }
                             msg.arg1 = MessageArg.SUCCES.getValue();
                             msgPayload.exceptions = exceptions;
                             msg.obj = msgPayload;
@@ -315,18 +332,18 @@ public class NetworkHandler {
     }
 
 
-    public NetworkHandler(Handler handler, Authentication authentication) {
+    public NetworkHandler(Handler handler, String token) {
         this.httpHandler = new HttpRequestsHandler();
         this.uiHandler = handler;
-        this.authentication = authentication;
+        this.token = token;
         Log.i(TAG, "NetworkHandler - instance created.");
     }
 
 
     public void updateDeviceStatus(Device device) {
 
-        NetworkingWorker worker = new NetworkingWorker(Urls.serverDeviceUrl, "POST");
-        worker.setPayload(Payload.Type.DEVICE_STATUS_UPDATE, authentication.token, device)
+        NetworkingWorker worker = new NetworkingWorker(EndPoints.devicePut);
+        worker.setPayload(device)
                 .setHandler(uiHandler)
                 .setHandlerMessageType(MessageType.DEVICE_UPDATE_STATUS)
                 .start();
@@ -334,8 +351,8 @@ public class NetworkHandler {
 
     public void addDevice(final Device device) {
 
-        NetworkingWorker worker = new NetworkingWorker(Urls.serverDeviceUrl, "POST");
-        worker.setPayload(Payload.Type.DEVICE_NEW, authentication.token, device)
+        NetworkingWorker worker = new NetworkingWorker(EndPoints.devicePost);
+        worker.setPayload(device)
                 .setHandlerMessageType(MessageType.DEVICE_NEW)
                 .setHandler(uiHandler)
                 .start();
@@ -343,56 +360,21 @@ public class NetworkHandler {
 
     public void getDeviceList() {
 
-        NetworkingWorker worker = new NetworkingWorker(Urls.serverDeviceUrl, "POST");
-        worker.setPayload(Payload.Type.DEVICE_LIST_REQUEST, authentication.token)
-                .retrieveDataAsObject(Device[].class)
+        NetworkingWorker worker = new NetworkingWorker(EndPoints.deviceGet);
+        worker.retrieveDataAsObject(Device[].class)
                 .setHandlerMessageType(MessageType.LIST_RELOAD)
                 .setHandler(uiHandler)
                 .start();
     }
 
-    public void uploadDeviceList(final ArrayList<Device> list) {
+    public void login(String userName, String password) throws InterruptedException {
 
-        Log.i(TAG, "NetworkHandler - worker thread - uploadDeviceList()");
-
-        Thread worker = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-
-                Payload payload = new Payload(Payload.Type.DEVICE_NEW, "token", list);
-                Log.i(TAG, "NetworkHandler - worker thread - payload created.");
-
-                httpHandler.send(gson.toJson(payload), Urls.serverDeviceUrl, "POST");
-                Log.i(TAG, "NetworkHandler - worker thread - forwarded task to httpHandler.");
-
-                while (httpHandler.isOngoing()) {
-
-                }
-
-                Log.i(TAG, "NetworkHandler - worker thread - HttpHandler finished task.");
-
-                Response response = httpHandler.getResponse();
-                Log.i(TAG, "NetworkHandler - worker thread - retrieved the response.");
-
-                if (response.responseCode != HttpURLConnection.HTTP_OK) {
-                    Log.i(TAG, "NetworkHandler - worker thread - response code != HTTP_OK.");
-                    Message msg = new Message();
-                    msg.what = 50;
-                    msg.arg1 = -1;
-                    uiHandler.sendMessage(msg);
-                    Log.i(TAG, "NetworkHandler - worker thread - sent message to uiHandler.");
-                    return;
-                }
-
-                Message msg = new Message();
-                msg.what = 50;
-                msg.arg1 = 1;
-                uiHandler.sendMessage(msg);
-                Log.i(TAG, "NetworkHandler - worker thread - sent message to uiHandler.");
-            }
-        });
-        worker.start();
-        Log.i(TAG, "NetworkHandler - worker thread - worker thread started.");
+        NetworkingWorker worker = new NetworkingWorker(EndPoints.userPost);
+        worker.setPayload(new CredsPair(userName, password))
+                .retrieveDataAsString()
+                .setHandler(uiHandler)
+                .setHandlerMessageType(MessageType.LOGIN)
+                .start();
+        worker.join();
     }
 }
