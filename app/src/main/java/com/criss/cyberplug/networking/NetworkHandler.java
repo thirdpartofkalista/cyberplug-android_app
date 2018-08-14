@@ -353,6 +353,7 @@ public class NetworkHandler {
 
         NetworkingWorker worker = new NetworkingWorker(EndPoints.devicePost);
         worker.setPayload(device)
+                .retrieveDataAsObject(Device.class)
                 .setHandlerMessageType(MessageType.DEVICE_NEW)
                 .setHandler(uiHandler)
                 .start();

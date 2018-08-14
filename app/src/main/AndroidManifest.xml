@@ -10,7 +10,6 @@
 
     <!-- Camera persmission for QR code scanning -->
     <!-- <uses-permission android:name="android.permission.CAMERA" /> -->
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -33,7 +32,8 @@
         <activity android:name=".DeviceSettings" />
         <activity android:name=".AddGroupActivity" />
         <activity android:name=".GroupSettings" />
-        <activity android:name=".ConfigureDevice"></activity>
+        <activity android:name=".ConfigureDevice" />
+        <activity android:name=".Landing"></activity>
     </application>
 
 </manifest>

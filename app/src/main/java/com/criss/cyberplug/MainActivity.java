@@ -218,7 +218,8 @@ public class MainActivity extends AppCompatActivity {
             if (msg.what == MessageType.DEVICE_NEW.getValue()) {
                 if (!nullPayload) {
                     if (!(payload.exceptions.size() > 0)) {
-                        makeShortToast("Device added succesfully on the server.");
+                        devices.add((Device)payload.data);
+                        makeShortToast("Device added succesfully");
                     }
                     else {
 //                        handle exceptions
