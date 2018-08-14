@@ -27,7 +27,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".DeviceSettings" />
-        <activity android:name=".AddGroupActivity"></activity>
+        <activity android:name=".AddGroupActivity" />
+        <activity android:name=".GroupSettings"></activity>
     </application>
 
 </manifest>

@@ -4,7 +4,8 @@ public enum RequestCode {
     ADD_NEW_DEVICE(0),
     DEVICE_SETTINGS(1),
     APP_SETTINGS(2),
-    ADD_NEW_GROUP(3);
+    ADD_NEW_GROUP(3),
+    GROUP_SETTINGS(4);
 
     private final int value;
 

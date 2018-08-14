@@ -42,8 +42,7 @@ public class GroupListAdapter extends ArrayAdapter<Group> implements View.OnClic
     }
 
     public GroupListAdapter(ArrayList<Group> data, Context context, NetworkHandler networkHandler, Handler handler) {
-        // TODO: 13.08.2018  group list item
-        super(context, R.layout.device_item, data);
+        super(context, R.layout.group_item, data);
         this.context = context;
         this.networkHandler = networkHandler;
         this.uiHandler = handler;
@@ -63,7 +62,7 @@ public class GroupListAdapter extends ArrayAdapter<Group> implements View.OnClic
             viewHolder = new GroupViewHolder();
 
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            view = inflater.inflate(R.layout.device_item, parent, false);
+            view = inflater.inflate(R.layout.group_item, parent, false);
 
             // create item ?                   ^
             viewHolder.groupName = view.findViewById(R.id.group_name);
@@ -95,7 +94,7 @@ public class GroupListAdapter extends ArrayAdapter<Group> implements View.OnClic
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
 
                 group.setStatus(isChecked);
-                Log.i(TAG, "Switch - toggled for the device with the index: " + position);
+                Log.i(TAG, "Switch - toggled for the group with the index: " + position);
 
 //                networkHandler.updateGroupStatus(group);
 
@@ -122,5 +121,5 @@ public class GroupListAdapter extends ArrayAdapter<Group> implements View.OnClic
         return view;
     }
 
-    // TODO: 06.08.2018 add logging and do the list adapter
+    // TODO: 06.08.2018 add logging
 }

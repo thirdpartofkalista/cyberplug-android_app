@@ -245,6 +245,15 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), DeviceSettings.class);
                     intent.putExtra("index", msg.arg1);
                     startActivityForResult(intent, RequestCode.DEVICE_SETTINGS.getValue());
+                    Log.i(TAG, "Started settings.");
+                }
+            }
+            if (msg.what == MessageType.GROUP_SETTINGS.getValue()){
+                if (true){
+                    Intent intent = new Intent(getApplicationContext(), GroupSettings.class);
+                    intent.putExtra("index", msg.arg1);
+                    startActivityForResult(intent, RequestCode.GROUP_SETTINGS.getValue());
+
                 }
             }
 
@@ -394,9 +403,20 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == RequestCode.DEVICE_SETTINGS.getValue()) {
             // TODO: 06.08.2018 device settings
-            if (data.getBooleanExtra("delete", false)) {
-                devices.remove(data.getIntExtra("index", 0));
-                updateListUi();
+            if (requestCode == Activity.RESULT_OK){
+                if (data.getBooleanExtra("delete", false)) {
+                    Log.i(TAG, "should delete device.");
+                    devices.remove(data.getIntExtra("index", 0));
+                    updateListUi();
+                }
+            }
+        }
+        if (requestCode == RequestCode.GROUP_SETTINGS.getValue()){
+            if (requestCode == Activity.RESULT_OK){
+                if (data.getBooleanExtra("delete", false)){
+                    groups.remove(data.getIntExtra("index", 0));
+                    updateListUi();
+                }
             }
         }
 

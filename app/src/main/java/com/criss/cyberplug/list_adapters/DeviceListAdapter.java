@@ -124,7 +124,7 @@ public class DeviceListAdapter extends ArrayAdapter<Device> implements View.OnCl
                 msg.what = MessageType.DEVICE_SETTINGS.getValue();
                 msg.arg1 = position;
                 uiHandler.sendMessage(msg);
-
+                Log.i(TAG, "Settings button pressed.");
             }
         });
 
