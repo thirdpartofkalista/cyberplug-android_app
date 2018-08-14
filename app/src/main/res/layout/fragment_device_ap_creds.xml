@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddDeviceActivity">
+
+    <TextView
+        android:id="@+id/device_wifi_name_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="125dp"
+        android:text="Device Wi-Fi name"
+        android:textSize="25dp"/>
+
+    <EditText
+        android:id="@+id/device_wifi_name_edittext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/device_wifi_name_textview"
+        android:layout_below="@+id/device_wifi_name_textview"
+        android:ems="10"
+        android:hint="Enter device name..."
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/device_password_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/device_wifi_name_textview"
+        android:layout_marginTop="225dp"
+        android:text="Password"
+        android:textSize="25dp" />
+
+    <EditText
+        android:id="@+id/device_password_edittext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/device_password_textview"
+        android:layout_below="@+id/device_password_textview"
+        android:ems="10"
+        android:hint="Enter a password..."
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/scan_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/device_password_textview"
+        android:layout_marginBottom="200dp"
+        android:text="Or, scan a QR code instead"
+        android:textSize="17dp" />
+
+    <Button
+        android:id="@+id/scan_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/scan_textview"
+        android:layout_alignBaseline="@id/scan_textview"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="26dp"
+        android:text="scan"
+        />
+
+    <Button
+        android:id="@+id/next_button"
+        android:layout_width="130dp"
+        android:layout_height="65dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="69dp"
+        android:text="next"
+        android:textSize="25dp" />
+</RelativeLayout>

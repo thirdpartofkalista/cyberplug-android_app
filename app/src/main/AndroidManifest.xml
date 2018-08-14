@@ -3,10 +3,14 @@
     package="com.criss.cyberplug">
 
     <!-- Internet permission for networking -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <!-- Camera persmission for QR code scanning -->
     <!-- <uses-permission android:name="android.permission.CAMERA" /> -->
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"

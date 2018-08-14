@@ -249,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             if (msg.what == MessageType.GROUP_SETTINGS.getValue()){
-                if (true){
+                if (true) {
                     Intent intent = new Intent(getApplicationContext(), GroupSettings.class);
                     intent.putExtra("index", msg.arg1);
                     startActivityForResult(intent, RequestCode.GROUP_SETTINGS.getValue());
@@ -323,6 +323,7 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View view) {
         if (lastPlace == 0){
             Intent mIntent = new Intent(getApplication(), AddDeviceActivity.class);
+            mIntent.putExtra("key", preferences.getUserName());
             startActivityForResult(mIntent, RequestCode.ADD_NEW_DEVICE.getValue());
         }
         else if (lastPlace == 1){
