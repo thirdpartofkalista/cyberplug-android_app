@@ -15,6 +15,8 @@ public class Preferences {
 
     private String userName;
 
+    private String token;
+
     public Preferences(Context context) {
         this.context = context;
         this.preferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
@@ -43,5 +45,13 @@ public class Preferences {
         this.userName = userName;
         editor.putString("userName", userName);
         editor.apply();
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

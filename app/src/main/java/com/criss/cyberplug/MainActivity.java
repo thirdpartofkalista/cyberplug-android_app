@@ -23,15 +23,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.criss.cyberplug.constants.Authentication;
-import com.criss.cyberplug.types.thread_communication.MessageType;
 import com.criss.cyberplug.constants.Preferences;
-import com.criss.cyberplug.types.intents.RequestCode;
 import com.criss.cyberplug.list_adapters.DeviceListAdapter;
 import com.criss.cyberplug.list_adapters.GroupListAdapter;
 import com.criss.cyberplug.networking.NetworkHandler;
+import com.criss.cyberplug.types.intents.RequestCode;
 import com.criss.cyberplug.types.list.Device;
 import com.criss.cyberplug.types.list.Group;
+import com.criss.cyberplug.types.thread_communication.MessageType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -66,8 +65,6 @@ public class MainActivity extends AppCompatActivity {
     private NetworkHandler networkHandler;
 
     private Preferences preferences;
-
-    private Authentication authentication;
 
 
 
@@ -179,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
 //                            do something
                         }
                         else {
-//                            do something
+//                            do something else
                         }
                     }
                     else {
@@ -469,7 +466,7 @@ public class MainActivity extends AppCompatActivity {
         preferences = new Preferences(getApplicationContext());
 
 //        Initialize networking
-        networkHandler = new NetworkHandler(uiHandler, new Authentication(preferences.getUserName()));
+        networkHandler = new NetworkHandler(uiHandler, preferences.getToken());
 
 //        Enable the toolbar
         toolbar = findViewById(R.id.toolbar);
