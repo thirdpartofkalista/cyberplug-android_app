@@ -28,7 +28,8 @@
         </activity>
         <activity android:name=".DeviceSettings" />
         <activity android:name=".AddGroupActivity" />
-        <activity android:name=".GroupSettings"></activity>
+        <activity android:name=".GroupSettings" />
+        <activity android:name=".ConfigureDevice"></activity>
     </application>
 
 </manifest>
