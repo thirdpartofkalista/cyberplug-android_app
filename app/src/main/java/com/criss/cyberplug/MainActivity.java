@@ -312,10 +312,17 @@ public class MainActivity extends AppCompatActivity {
     private View.OnClickListener addButtonOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-
+        if (lastPlace == 0){
             Intent mIntent = new Intent(getApplication(), AddDeviceActivity.class);
-
             startActivityForResult(mIntent, RequestCode.ADD_NEW_DEVICE.getValue());
+        }
+        else if (lastPlace == 1){
+            Intent mIntent = new Intent(getApplication(), AddGroupActivity.class);
+            startActivityForResult(mIntent, RequestCode.ADD_NEW_GROUP.getValue());
+        }
+//            Intent mIntent = new Intent(getApplication(), AddDeviceActivity.class);
+
+//            startActivityForResult(mIntent, RequestCode.ADD_NEW_DEVICE.getValue());
 
         }
     };
@@ -371,6 +378,18 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_CANCELED) {
                 makeLongToast("No device added.");
             }
+        }
+
+        if (requestCode == RequestCode.ADD_NEW_GROUP.getValue()){
+
+            if (resultCode == Activity.RESULT_OK){
+                Group group = new Group(groups.size() + 1, data.getStringExtra("name"), false);
+                groups.add(group);
+//                networkHandler.addGroup(group);
+                updateListUi();
+            }
+            if (requestCode == Activity.RESULT_CANCELED)
+                makeLongToast("No group added");
         }
 
         if (requestCode == RequestCode.DEVICE_SETTINGS.getValue()) {

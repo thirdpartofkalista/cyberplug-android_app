@@ -66,10 +66,10 @@ public class GroupListAdapter extends ArrayAdapter<Group> implements View.OnClic
             view = inflater.inflate(R.layout.device_item, parent, false);
 
             // create item ?                   ^
-//            viewHolder.groupName = view.findViewById(R.id.group_name);
-//            viewHolder.groupSwitch = view.findViewById(R.id.group_switch);
+            viewHolder.groupName = view.findViewById(R.id.group_name);
+            viewHolder.groupSwitch = view.findViewById(R.id.group_switch);
 
-//            viewHolder.settingsButton = view.findViewById(R.id.group_settings_button);
+            viewHolder.settingsButton = view.findViewById(R.id.group_settings_button);
 
             result = view;
 

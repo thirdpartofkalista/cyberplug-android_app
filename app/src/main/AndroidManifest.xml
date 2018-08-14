@@ -26,7 +26,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DeviceSettings"></activity>
+        <activity android:name=".DeviceSettings" />
+        <activity android:name=".AddGroupActivity"></activity>
     </application>
 
 </manifest>

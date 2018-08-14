@@ -3,7 +3,8 @@ package com.criss.cyberplug.types.intents;
 public enum RequestCode {
     ADD_NEW_DEVICE(0),
     DEVICE_SETTINGS(1),
-    APP_SETTINGS(2);
+    APP_SETTINGS(2),
+    ADD_NEW_GROUP(3);
 
     private final int value;
 
