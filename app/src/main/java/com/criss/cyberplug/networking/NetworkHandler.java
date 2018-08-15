@@ -4,7 +4,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.criss.cyberplug.constants.CredsPair;
+import com.criss.cyberplug.types.networking.CredsPair;
 import com.criss.cyberplug.constants.EndPoints;
 import com.criss.cyberplug.networking.HttpRequestsHandler.Response;
 import com.criss.cyberplug.types.list.Device;
@@ -370,11 +370,22 @@ public class NetworkHandler {
 
     public void login(String userName, String password) throws InterruptedException {
 
-        NetworkingWorker worker = new NetworkingWorker(EndPoints.userPost);
+        NetworkingWorker worker = new NetworkingWorker(EndPoints.userGet);
         worker.setPayload(new CredsPair(userName, password))
                 .retrieveDataAsString()
                 .setHandler(uiHandler)
                 .setHandlerMessageType(MessageType.LOGIN)
+                .start();
+        worker.join();
+    }
+
+    public void createAccount(String userName, String password) throws InterruptedException {
+
+        NetworkingWorker worker = new NetworkingWorker(EndPoints.userPost);
+        worker.setPayload(new CredsPair(userName, password))
+                .retrieveDataAsString()
+                .setHandler(uiHandler)
+                .setHandlerMessageType(MessageType.CREATE_ACCOUNT)
                 .start();
         worker.join();
     }
