@@ -46,18 +46,23 @@ public class AddDeviceActivity extends AppCompatActivity {
         deviceWifiPassword = findViewById(R.id.device_password_edittext);
         nextButton = findViewById(R.id.next_button);
 
-        final String mDeviceWifiName = "\"" + deviceWifiName.getText().toString() + "\"";
-        final String mDeviceWifiPassword = "\"" + deviceWifiPassword.getText().toString() + "\"";
+        final String mDeviceWifiName = deviceWifiName.getText().toString();
+        final String mDeviceWifiPassword = deviceWifiPassword.getText().toString();
 
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                WifiConfiguration conf = new WifiConfiguration();
-                conf.SSID = mDeviceWifiName;
-                conf.preSharedKey = mDeviceWifiPassword;
 
                 WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(getApplicationContext().WIFI_SERVICE);
+
+                if (!wifiManager.isWifiEnabled()) {
+                    wifiManager.setWifiEnabled(true);
+                }
+
+                WifiConfiguration conf = new WifiConfiguration();
+                conf.SSID = String.format("\"%s\"", mDeviceWifiName);
+                conf.preSharedKey = String.format("\"%s\"", mDeviceWifiPassword);
 
                 int netId = wifiManager.addNetwork(conf);
                 wifiManager.disconnect();

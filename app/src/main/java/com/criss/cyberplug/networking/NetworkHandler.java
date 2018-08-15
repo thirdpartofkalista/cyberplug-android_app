@@ -368,10 +368,10 @@ public class NetworkHandler {
                 .start();
     }
 
-    public void login(String userName, String password) throws InterruptedException {
+    public void login(String email, String password) throws InterruptedException {
 
         NetworkingWorker worker = new NetworkingWorker(EndPoints.userGet);
-        worker.setPayload(new CredsPair(userName, password))
+        worker.setPayload(new CredsPair(email, password))
                 .retrieveDataAsString()
                 .setHandler(uiHandler)
                 .setHandlerMessageType(MessageType.LOGIN)
@@ -379,10 +379,10 @@ public class NetworkHandler {
         worker.join();
     }
 
-    public void createAccount(String userName, String password) throws InterruptedException {
+    public void createAccount(String email, String password) throws InterruptedException {
 
         NetworkingWorker worker = new NetworkingWorker(EndPoints.userPost);
-        worker.setPayload(new CredsPair(userName, password))
+        worker.setPayload(new CredsPair(email, password))
                 .retrieveDataAsString()
                 .setHandler(uiHandler)
                 .setHandlerMessageType(MessageType.CREATE_ACCOUNT)
