@@ -6,7 +6,9 @@ public enum RequestCode {
     APP_SETTINGS(2),
     ADD_NEW_GROUP(3),
     GROUP_SETTINGS(4),
-    CONFIGURE_DEVICE(5);
+    CONFIGURE_DEVICE(5),
+    CREATE_ACCOUNT(6),
+    LOG_IN(7);
 
     private final int value;
 

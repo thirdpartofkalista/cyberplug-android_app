@@ -13,7 +13,7 @@ public class Preferences {
 
     private boolean isLoggedIn;
 
-    private String userName;
+    private String email;
 
     private String token;
 
@@ -23,7 +23,7 @@ public class Preferences {
 
         this.editor = preferences.edit();
 
-        userName = preferences.getString("userName", "");
+        email = preferences.getString("email", "");
         isLoggedIn = preferences.getBoolean("isLoggedIn", false);
     }
 
@@ -37,13 +37,13 @@ public class Preferences {
         editor.apply();
     }
 
-    public String getUserName() {
-        return userName;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-        editor.putString("userName", userName);
+    public void setEmail(String email) {
+        this.email = email;
+        editor.putString("email", email);
         editor.apply();
     }
 

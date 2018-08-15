@@ -302,8 +302,8 @@ public class MainActivity extends AppCompatActivity {
 
                 case R.id.log_out_button:
                     preferences.setLoggedIn(false);
-                    preferences.setUserName("");
-                    Intent c = new Intent(getApplication(), LoginActivity.class);
+                    preferences.setEmail("");
+                    Intent c = new Intent(getApplication(), Landing.class);
                     startActivity(c);
                     finish();
                     break;
@@ -381,7 +381,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //                updateListUi();
                 Intent mIntent = new Intent(getApplication(), ConfigureDevice.class);
-                mIntent.putExtra("key", preferences.getUserName());
+                mIntent.putExtra("key", preferences.getEmail());
                 startActivityForResult(mIntent, RequestCode.CONFIGURE_DEVICE.getValue());
             }
             if (resultCode == Activity.RESULT_CANCELED) {
@@ -495,7 +495,7 @@ public class MainActivity extends AppCompatActivity {
 
 //        Update nav view username text field
         TextView userNameTextView = navHeader.findViewById(R.id.username_text_view);
-        userNameTextView.setText(preferences.getUserName());
+        userNameTextView.setText(preferences.getEmail());
 
     }
 
