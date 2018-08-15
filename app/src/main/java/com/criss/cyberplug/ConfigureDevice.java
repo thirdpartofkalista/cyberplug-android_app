@@ -25,7 +25,8 @@ public class ConfigureDevice extends AppCompatActivity {
     private EditText deviceName;
     private Button save;
 
-    private String deviceUrl = "http://192.168.0.1/wifisave";
+    private final String deviceUrl = "http://192.168.4.1/wifisave";
+
 
     private URL url;
 
@@ -34,7 +35,7 @@ public class ConfigureDevice extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configure_device);
 
-        String key = getIntent().getStringExtra("key");
+        final String key = getIntent().getStringExtra("key");
 
         Toolbar toolbar = findViewById(R.id.configure_device_toolbar);
         setSupportActionBar(toolbar);
@@ -48,30 +49,21 @@ public class ConfigureDevice extends AppCompatActivity {
         deviceName = findViewById(R.id.device_name_edittext);
         save = findViewById(R.id.save_button);
 
-        String mWifiName = wifiName.getText().toString();
-        String mWifiPassword = wifiPassword.getText().toString();
-        final String mDeviceName = deviceName.getText().toString();
-
-        String mKey = null;
-
-        try {
-            mWifiName = URLEncoder.encode(mWifiName, "UTF-8");
-            mWifiPassword = URLEncoder.encode(mWifiPassword, "UTF-8");
-            mKey = URLEncoder.encode(key, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            url = new URL(deviceUrl + "?ssid=" + mWifiName + "&pass=" + mWifiPassword + "&key=" + mKey);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        final String nWifiName = wifiName.getText().toString();
+        final String nWifiPassword = wifiPassword.getText().toString();
+        final String nDeviceName = deviceName.getText().toString();
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
+
+                    String mWifiName = URLEncoder.encode(nWifiName, "UTF-8");
+                    String mWifiPassword = URLEncoder.encode(nWifiPassword, "UTF-8");
+                    String mKey = URLEncoder.encode(key, "UTF-8");
+                    String mDeviceName = URLEncoder.encode(nDeviceName, "UTF-8");
+
+                    URL url = new URL(deviceUrl + "?s=" + mWifiName + "&p=" + mWifiPassword + "&name="  + mDeviceName+ "&devkey=" + mKey);
 
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("POST");
@@ -82,7 +74,6 @@ public class ConfigureDevice extends AppCompatActivity {
 
                     WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(getApplicationContext().WIFI_SERVICE);
                     wifiManager.disconnect();
-                    wifiManager.reconnect();
 
                     Intent intention = new Intent();
                     intention.putExtra("name", mDeviceName);
