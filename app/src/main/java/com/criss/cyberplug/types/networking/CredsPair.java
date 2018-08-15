@@ -1,4 +1,4 @@
-package com.criss.cyberplug.constants;
+package com.criss.cyberplug.types.networking;
 
 import com.google.gson.annotations.Expose;
 
