@@ -158,6 +158,8 @@ public class NetworkHandler {
 
             MessagePayload msgPayload = new MessagePayload();
 
+            logInfo(token);
+
             try {
                 if (payload == null) {
                     httpHandler.send(endPoint, token);
@@ -368,25 +370,23 @@ public class NetworkHandler {
                 .start();
     }
 
-    public void login(String email, String password) throws InterruptedException {
-
-        NetworkingWorker worker = new NetworkingWorker(EndPoints.userGet);
-        worker.setPayload(new CredsPair(email, password))
-                .retrieveDataAsString()
-                .setHandler(uiHandler)
-                .setHandlerMessageType(MessageType.LOGIN)
-                .start();
-        worker.join();
-    }
-
-    public void createAccount(String email, String password) throws InterruptedException {
+    public void login(String email, String password) {
 
         NetworkingWorker worker = new NetworkingWorker(EndPoints.userPost);
         worker.setPayload(new CredsPair(email, password))
                 .retrieveDataAsString()
                 .setHandler(uiHandler)
+                .setHandlerMessageType(MessageType.LOGIN)
+                .start();
+    }
+
+    public void createAccount(String email, String password) {
+
+        NetworkingWorker worker = new NetworkingWorker(EndPoints.userPut);
+        worker.setPayload(new CredsPair(email, password))
+                .retrieveDataAsString()
+                .setHandler(uiHandler)
                 .setHandlerMessageType(MessageType.CREATE_ACCOUNT)
                 .start();
-        worker.join();
     }
 }

@@ -53,7 +53,9 @@ public class HttpRequestsHandler {
         conn.setRequestMethod(method);
         Log.i(TAG, "HttpUrlConnection - set method: " + method);
 
-        conn.setRequestProperty("Content-type", "application/json");
+        if (doOutput) {
+            conn.setRequestProperty("Content-type", "application/json");
+        }
         conn.setRequestProperty("Authentication", "Bearer " + token);
 //        Log.i(TAG, "HttpUrlConnection - set request property: " + requestProperty[0] + ", " + requestProperty[1]);
 
@@ -114,7 +116,7 @@ public class HttpRequestsHandler {
                 HttpURLConnection conn = null;
                 Log.i(TAG, "HttpHandler Thread - started.");
 
-                Log.i(TAG, endPoint.url + endPoint.method);
+                Log.i(TAG, endPoint.method + " " + endPoint.url);
                 try {
 
                     conn = getConnection(endPoint.url, endPoint.method, /*new String[]{"Content-type", "application/json"},*/ true, true, token);
@@ -126,9 +128,9 @@ public class HttpRequestsHandler {
                     Log.i(TAG, "HttpHandler Thread - writeStream() succesful.");
 
                     response.responseCode = conn.getResponseCode();
-                    Log.i(TAG, "HttpHandler Thread - retrieved response code.");
+                    Log.i(TAG, "HttpHandler Thread - retrieved response code: " + response.responseCode);
                     response.responseMessage = conn.getResponseMessage();
-                    Log.i(TAG, "HttpHandler Thread - retrieved response message.");
+                    Log.i(TAG, "HttpHandler Thread - retrieved response message: " + response.responseMessage);
                     response.responseData = readStream(conn);
                     Log.i(TAG, "HttpHandler Thread - readStream() succesful.");
                     Log.i(TAG, "HttpHandler Thread - retrieved response data.");
@@ -171,9 +173,9 @@ public class HttpRequestsHandler {
                     Log.i(TAG, "HttpHandler Thread - connected.");
 
                     response.responseCode = conn.getResponseCode();
-                    Log.i(TAG, "HttpHandler Thread - retrieved response code.");
+                    Log.i(TAG, "HttpHandler Thread - retrieved response code: " + response.responseCode);
                     response.responseMessage = conn.getResponseMessage();
-                    Log.i(TAG, "HttpHandler Thread - retrieved response message.");
+                    Log.i(TAG, "HttpHandler Thread - retrieved response message: " + response.responseMessage);
                     response.responseData = readStream(conn);
                     Log.i(TAG, "HttpHandler Thread - readStream() succesful.");
                     Log.i(TAG, "HttpHandler Thread - retrieved response data.");

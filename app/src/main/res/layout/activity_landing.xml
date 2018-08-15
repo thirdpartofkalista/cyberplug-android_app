@@ -17,7 +17,7 @@
         android:textSize="25dp" />
 
     <Button
-        android:id="@+id/create_accout_button"
+        android:id="@+id/create_account_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -38,8 +38,7 @@
     <Button
         android:id="@+id/log_in_button"
         android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/log_in_textview"
         android:text="log in"

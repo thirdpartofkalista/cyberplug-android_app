@@ -402,6 +402,8 @@ public class MainActivity extends AppCompatActivity {
 
                 networkHandler.addDevice(new Device(deviceName));
 
+                requestDeviceList();
+
             }
         }
 
@@ -439,6 +441,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == RequestCode.APP_SETTINGS.getValue()) {
             // TODO: 06.08.2018 app settings
         }
+
     }
 //    ----------------------------------------------------------------------------
 //    ----------------------------------------------------------------------------
