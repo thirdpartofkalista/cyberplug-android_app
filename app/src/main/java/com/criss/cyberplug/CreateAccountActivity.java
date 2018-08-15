@@ -17,15 +17,13 @@ import com.criss.cyberplug.constants.Preferences;
 import com.criss.cyberplug.networking.NetworkHandler;
 import com.criss.cyberplug.types.thread_communication.MessageType;
 
-public class LoginActivity extends AppCompatActivity {
+public class CreateAccountActivity extends AppCompatActivity {
 
     private Preferences preferences;
 
+    Button button;
     EditText email;
-
-    EditText passField;
-
-    Button login;
+    EditText password;
 
     NetworkHandler networkHandler;
 
@@ -37,15 +35,14 @@ public class LoginActivity extends AppCompatActivity {
 
             NetworkHandler.MessagePayload payload = (NetworkHandler.MessagePayload) msg.obj;
 
-            if (msg.what == MessageType.LOGIN.getValue()) {
+            if (msg.what == MessageType.CREATE_ACCOUNT.getValue()) {
                 if (msg.arg1 == 0) {
                     preferences.setToken((String) payload.data);
                     preferences.setLoggedIn(true);
 
                     setResult(Activity.RESULT_OK);
                     finish();
-                }
-                else {
+                } else {
                     setResult(Activity.RESULT_CANCELED);
                     finish();
                 }
@@ -53,42 +50,28 @@ public class LoginActivity extends AppCompatActivity {
         }
     };
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_create_account);
 
-        networkHandler = new NetworkHandler(uiHandler, "");
+        button = findViewById(R.id.create_button);
+        email = findViewById(R.id.for_email_edittext);
+        password = findViewById(R.id.for_password_edittext);
 
         Toolbar toolbar = findViewById(R.id.login_toolbar);
         setSupportActionBar(toolbar);
 
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
-        ab.setTitle("Login");
+        ab.setTitle("Create account");
 
-        preferences = new Preferences(getApplicationContext());
-
-        email = findViewById(R.id.email_edittext);
-        passField = findViewById(R.id.password_edittext_login);
-        login = findViewById(R.id.login_button);
-
-        login.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String mEmail = email.getText().toString();
-                    String password = passField.getText().toString();
-                    preferences.setEmail(mEmail);
-
-                    try {
-                        networkHandler.login(mEmail, password);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            });
-
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplication(), Landing.class);
+                startActivity(intent);
+            }
+        });
     }
 }

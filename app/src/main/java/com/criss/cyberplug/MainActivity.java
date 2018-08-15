@@ -300,6 +300,7 @@ public class MainActivity extends AppCompatActivity {
 //                    startActivity(b);
                     break;
 
+
                 case R.id.log_out_button:
                     preferences.setLoggedIn(false);
                     preferences.setEmail("");
@@ -307,6 +308,9 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(c);
                     finish();
                     break;
+
+
+
             }
 
             drawerLayout.closeDrawer(GravityCompat.START);

@@ -34,7 +34,7 @@ public class Landing extends AppCompatActivity {
         log_in_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
+                Intent intent = new Intent(getApplication(), LoginActivity.class);
                 startActivityForResult(intent, RequestCode.LOG_IN.getValue());
             }
         });

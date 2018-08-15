@@ -10,7 +10,10 @@ public enum MessageType {
     DEVICE_SETTINGS(4),
     GROUP_SETTINGS(5),
 //    LOGIN
-    LOGIN(6);
+    LOGIN(6),
+//    CREATE ACCOUNT
+    CREATE_ACCOUNT(7);
+
     private final int value;
 
     MessageType(final int value) {

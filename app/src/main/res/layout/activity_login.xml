@@ -26,7 +26,7 @@
         android:layout_below="@id/password_textview"
         android:ems="10"
         android:hint="Enter the password..."
-        android:inputType="textPersonName" />
+        android:inputType="textPassword" />
 
     <Button
         android:id="@+id/login_button"
