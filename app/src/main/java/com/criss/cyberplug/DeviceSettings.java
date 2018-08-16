@@ -62,6 +62,7 @@ public class DeviceSettings extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplication(), MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
