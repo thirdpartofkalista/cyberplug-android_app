@@ -108,12 +108,14 @@ public class ConfigureDevice extends AppCompatActivity {
                             Intent intention = new Intent();
                             intention.putExtra("name", nDeviceName);
 
+
                             setResult(Activity.RESULT_OK, intention);
                             finish();
                         }
                     }
                 });
                 thread.start();
+
             }
         });
 

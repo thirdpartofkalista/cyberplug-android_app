@@ -26,7 +26,6 @@ public class DeviceSettings extends AppCompatActivity {
 
     int index;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,8 +59,9 @@ public class DeviceSettings extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplication(), MainActivity.class);
-                startActivity(intent);
+
+                Intent result = new Intent();
+                setResult(Activity.RESULT_OK, result);
                 finish();
             }
         });

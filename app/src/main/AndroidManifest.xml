@@ -35,7 +35,8 @@
         <activity android:name=".ConfigureDevice" />
         <activity android:name=".Landing" />
         <activity android:name=".CreateAccountActivity" />
-        <activity android:name=".SettingsActivity"></activity>
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".HelpActivity"></activity>
     </application>
 
 </manifest>
