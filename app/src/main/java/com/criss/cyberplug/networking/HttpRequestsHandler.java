@@ -3,6 +3,8 @@ package com.criss.cyberplug.networking;
 import android.util.Log;
 
 import com.criss.cyberplug.constants.EndPoints;
+import com.criss.cyberplug.types.networking.CredsPair;
+import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -10,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 
@@ -119,7 +122,31 @@ public class HttpRequestsHandler {
                 Log.i(TAG, endPoint.method + " " + endPoint.url);
                 try {
 
-                    conn = getConnection(endPoint.url, endPoint.method, /*new String[]{"Content-type", "application/json"},*/ true, true, token);
+//                    if (endPoint.method == "GET") {
+//                        conn = getConnection(endPoint.url, endPoint.method, /*new String[]{"Content-type", "application/json"},*/ true, false, token);
+//                    }
+//                    else {
+//                        conn = getConnection(endPoint.url, endPoint.method, /*new String[]{"Content-type", "application/json"},*/ true, true, token);
+//                    }
+
+                    if (endPoint.method == "GET" && endPoint == EndPoints.userGet) {
+                        Gson gson = new Gson();
+                        CredsPair creds = gson.fromJson(json, CredsPair.class);
+                        StringBuilder stringBuilder = new StringBuilder(endPoint.url.toString());
+                        stringBuilder.append("?email=")
+                                .append(URLEncoder.encode(creds.email, "UTF-8"))
+                                .append("&password=")
+                                .append(URLEncoder.encode(creds.password, "UTF-8"));
+                        endPoint.url = new URL(stringBuilder.toString());
+
+                        conn = getConnection(endPoint.url, endPoint.method, true, false, token);
+                    }
+                    else {
+                        conn = getConnection(endPoint.url, endPoint.method, /*new String[]{"Content-type", "application/json"},*/ true, true, token);
+                    }
+
+
+
                     Log.i(TAG, "HttpHandler Thread - retrieved connection.");
                     conn.connect();
                     Log.i(TAG, "HttpHandler Thread - connected.");
@@ -167,7 +194,7 @@ public class HttpRequestsHandler {
 
                 try {
 
-                    conn = getConnection(endPoint.url, endPoint.method, /*new String[]{"Content-type", "application/json"},*/ true, true, token);
+                    conn = getConnection(endPoint.url, endPoint.method, /*new String[]{"Content-type", "application/json"},*/ true, false, token);
                     Log.i(TAG, "HttpHandler Thread - retrieved connection.");
                     conn.connect();
                     Log.i(TAG, "HttpHandler Thread - connected.");

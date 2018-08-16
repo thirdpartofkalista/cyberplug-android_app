@@ -372,7 +372,7 @@ public class NetworkHandler {
 
     public void login(String email, String password) {
 
-        NetworkingWorker worker = new NetworkingWorker(EndPoints.userPost);
+        NetworkingWorker worker = new NetworkingWorker(EndPoints.userGet);
         worker.setPayload(new CredsPair(email, password))
                 .retrieveDataAsString()
                 .setHandler(uiHandler)
@@ -382,7 +382,7 @@ public class NetworkHandler {
 
     public void createAccount(String email, String password) {
 
-        NetworkingWorker worker = new NetworkingWorker(EndPoints.userPut);
+        NetworkingWorker worker = new NetworkingWorker(EndPoints.userPost);
         worker.setPayload(new CredsPair(email, password))
                 .retrieveDataAsString()
                 .setHandler(uiHandler)
