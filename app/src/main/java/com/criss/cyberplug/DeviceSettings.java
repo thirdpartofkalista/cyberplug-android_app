@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 
 public class DeviceSettings extends AppCompatActivity {
@@ -15,6 +16,11 @@ public class DeviceSettings extends AppCompatActivity {
     String TAG;
 
     Button delete;
+    Button add;
+    Button reconfigure;
+    Button save;
+
+    EditText editText;
 
     Intent intent;
 
@@ -30,6 +36,11 @@ public class DeviceSettings extends AppCompatActivity {
         index = intent.getIntExtra("index", -1);
 
         delete = findViewById(R.id.delete_button);
+        save = findViewById(R.id.save_device_button);
+        reconfigure = findViewById(R.id.reconfigure_device_button);
+        add = findViewById(R.id.add_people_button);
+
+        editText = findViewById(R.id.device_name_edittext);
 
         Log.i(TAG, "started activity");
 
@@ -43,6 +54,28 @@ public class DeviceSettings extends AppCompatActivity {
                 Log.i(TAG, "delete: true, index:" + index);
                 setResult(Activity.RESULT_OK, result);
                 finish();
+            }
+        });
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplication(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        reconfigure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
 

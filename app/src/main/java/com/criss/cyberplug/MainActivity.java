@@ -290,6 +290,10 @@ public class MainActivity extends AppCompatActivity {
                     menuItem.setChecked(true);
                     break;
 
+                case R.id.settings_button:
+                    lastPlace = 2;
+                    break;
+
                 case R.id.about_button:
                     Intent a = new Intent(/*getApplication(), AboutActivity.class*/);
 //                    startActivity(a);

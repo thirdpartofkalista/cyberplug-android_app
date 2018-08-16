@@ -25,20 +25,75 @@
 
     <Button
         android:id="@+id/delete_button"
-        android:layout_width="match_parent"
+        android:layout_width="114dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/add_device_toolbar"
-        android:layout_marginTop="-512dp"
-        android:text="Delete" />
+        android:layout_alignEnd="@+id/add_people_button"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="118dp"
+        android:text="Delete"
+        />
+
+    <TextView
+        android:id="@+id/edit_device_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/_dynamic"
+        android:layout_marginTop="78dp"
+        android:text="Edit" />
+
+    <EditText
+        android:id="@+id/edit_edittext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/edit_device_textview"
+        android:layout_below="@+id/edit_device_textview"
+        android:ems="10"
+        android:hint="Enter a name..."
+        android:inputType="textPersonName" />
+
+    <ListView
+        android:layout_width="192dp"
+        android:layout_height="164dp"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/delete_button" />
 
     <Button
-        android:id="@+id/change_name_button"
-        android:layout_width="match_parent"
+        android:id="@+id/add_people_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/delete_button"
-        android:layout_marginTop="0dp"
-        android:text="Change name" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="261dp"
+        android:layout_marginEnd="38dp"
+        android:text="add" />
+
+    <TextView
+        android:id="@+id/people_list_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/edit_device_textview"
+        android:layout_marginTop="165dp"
+        android:text="Invited people list" />
+
+    <Button
+        android:id="@+id/reconfigure_device_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/edit_device_textview"
+        android:layout_alignTop="@+id/delete_button"
+        android:text="Reconfigure"
+        />
+
+    <Button
+        android:id="@+id/save_device_button"
+        android:layout_width="114dp"
+        android:layout_height="67dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="28dp"
+        android:text="save"
+        android:textSize="25dp" />
 
 </RelativeLayout>
