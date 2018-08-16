@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.criss.cyberplug.constants.Url;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -33,8 +35,6 @@ public class ConfigureDevice extends AppCompatActivity {
 
     private final String deviceUrl = "http://192.168.4.1/wifisave";
 
-
-    private URL url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,22 +79,25 @@ public class ConfigureDevice extends AppCompatActivity {
                             String mKey = URLEncoder.encode(key, "UTF-8");
                             String mDeviceName = URLEncoder.encode("numele", "UTF-8");
 
-                            URL url = new URL(deviceUrl);
+                            StringBuilder stringBuilder = new StringBuilder(deviceUrl);
+                            stringBuilder.append("?s=")
+                                    .append(mWifiName)
+                                    .append("&p=")
+                                    .append(mWifiPassword)
+                                    .append("&devkey=")
+                                    .append(key)
+                                    .append("&name=")
+                                    .append(mDeviceName);
 
-                            String out = "s=" + mWifiName + "&p=" + mWifiPassword + "&name="  + mDeviceName+ "&devkey=" + mKey;
+                            URL url = new URL(stringBuilder.toString());
 
                             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                             conn.setRequestMethod("GET");
 //                            conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
-                            conn.setDoOutput(true);
-                            conn.setDoInput(true);
+                            conn.setDoOutput(false);
 
                             conn.connect();
-
-                            writeStream(conn, out);
-
-                            String x = readStream(conn);
 
                             conn.disconnect();
 
@@ -119,42 +122,5 @@ public class ConfigureDevice extends AppCompatActivity {
             }
         });
 
-    }
-
-    private void writeStream(HttpURLConnection conn, String json) throws IOException {
-
-        DataOutputStream writer = new DataOutputStream(conn.getOutputStream());
-        Log.i(TAG, "Writer - initialized.");
-
-        writer.writeBytes(json);
-        Log.i(TAG, "Writer - wrote: " + json);
-
-        writer.flush();
-        Log.i(TAG, "Writer - flush");
-
-        writer.close();
-        Log.i(TAG, "Writer - closed.");
-    }
-
-    private String readStream(HttpURLConnection conn) throws IOException {
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        Log.i(TAG, "Reader - initialized.");
-
-        String line;
-
-        StringBuilder result = new StringBuilder();
-        Log.i(TAG, "String builder - initialized.");
-
-        while ((line = reader.readLine()) != null) {
-            result.append(line);
-            Log.i(TAG, "Line - read: " + line);
-        }
-        Log.i(TAG, "Reader - read: " + result.toString());
-
-        reader.close();
-        Log.i(TAG, "Reader - closed.");
-
-        return result.toString();
     }
 }

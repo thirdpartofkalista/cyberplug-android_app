@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.criss.cyberplug.constants.Preferences;
 import com.criss.cyberplug.networking.NetworkHandler;
@@ -39,6 +40,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                 if (msg.arg1 == 0) {
                     preferences.setToken((String) payload.data);
                     preferences.setLoggedIn(true);
+                    Toast.makeText(getApplicationContext(), preferences.getToken(), Toast.LENGTH_LONG);
 
                     setResult(Activity.RESULT_OK);
                     finish();

@@ -25,6 +25,7 @@ public class Preferences {
 
         email = preferences.getString("email", "");
         isLoggedIn = preferences.getBoolean("isLoggedIn", false);
+        this.token = preferences.getString("token", "");
     }
 
     public boolean isLoggedIn() {
@@ -53,5 +54,7 @@ public class Preferences {
 
     public void setToken(String token) {
         this.token = token;
+        editor.putString("token", token);
+        editor.apply();
     }
 }

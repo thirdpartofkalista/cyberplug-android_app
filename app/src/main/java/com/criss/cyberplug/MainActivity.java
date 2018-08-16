@@ -216,15 +216,16 @@ public class MainActivity extends AppCompatActivity {
             }
 
             if (msg.what == MessageType.DEVICE_NEW.getValue()) {
-                if (!nullPayload) {
-                    if (!(payload.exceptions.size() > 0)) {
-                        devices.add((Device)payload.data);
-                        makeShortToast("Device added succesfully");
-                    }
-                    else {
-//                        handle exceptions
-                    }
-                }
+//                if (!nullPayload) {
+//                    if (!(payload.exceptions.size() > 0)) {
+//                        devices.add((Device)payload.data);
+//                        makeShortToast("Device added succesfully");
+//                    }
+//                    else {
+////                        handle exceptions
+//                    }
+//                }
+                requestDeviceList();
             }
 
             if (msg.what == MessageType.DEVICE_UPDATE_STATUS.getValue()) {
@@ -406,7 +407,7 @@ public class MainActivity extends AppCompatActivity {
 
                 networkHandler.addDevice(new Device(deviceName));
 
-                requestDeviceList();
+//                requestDeviceList();
 
             }
         }
