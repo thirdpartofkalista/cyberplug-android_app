@@ -55,45 +55,36 @@ public class ConfigureDevice extends AppCompatActivity {
         deviceName = findViewById(R.id.device_name_edittext);
         save = findViewById(R.id.save_button);
 
-        final String nWifiName = wifiName.getText().toString();
-        final String nWifiPassword = wifiPassword.getText().toString();
-        final String nDeviceName = deviceName.getText().toString();
-
-
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                final String nWifiName = wifiName.getText().toString();
+                final String nWifiPassword = wifiPassword.getText().toString();
+                final String nDeviceName = deviceName.getText().toString();
 
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
                         try {
 
-//                            String mWifiName = URLEncoder.encode(nWifiName, "UTF-8");
-//                            String mWifiPassword = URLEncoder.encode(nWifiPassword, "UTF-8");
-//                            String mKey = URLEncoder.encode(key, "UTF-8");
-//                            String mDeviceName = URLEncoder.encode(nDeviceName, "UTF-8");
-
-                            String mWifiName = URLEncoder.encode("Around25", "UTF-8");
-                            String mWifiPassword = URLEncoder.encode("a25network", "UTF-8");
+                            String mWifiName = URLEncoder.encode(nWifiName, "UTF-8");
+                            String mWifiPassword = URLEncoder.encode(nWifiPassword, "UTF-8");
                             String mKey = URLEncoder.encode(key, "UTF-8");
-                            String mDeviceName = URLEncoder.encode("numele", "UTF-8");
 
-                            StringBuilder stringBuilder = new StringBuilder(deviceUrl);
-                            stringBuilder.append("?s=")
-                                    .append(mWifiName)
-                                    .append("&p=")
-                                    .append(mWifiPassword)
-                                    .append("&devkey=")
-                                    .append(key)
-                                    .append("&name=")
-                                    .append(mDeviceName);
+                            String finalUrl = deviceUrl + "?s=" +
+                                    mWifiName +
+                                    "&p=" +
+                                    mWifiPassword +
+                                    "&devkey=" +
+                                    mKey;
 
-                            URL url = new URL(stringBuilder.toString());
+                            Log.i(TAG, finalUrl);
+
+                            URL url = new URL(finalUrl);
 
                             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                             conn.setRequestMethod("GET");
-//                            conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
                             conn.setDoOutput(false);
 
