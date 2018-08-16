@@ -72,6 +72,8 @@ public class NetworkHandler {
 
         private Class messageObjectClass;
 
+        private String[] args;
+
 
         public NetworkingWorker(EndPoints.EndPoint endPoint) {
 
@@ -147,6 +149,11 @@ public class NetworkHandler {
             return this;
         }
 
+        public NetworkingWorker setArgs(String[] args) {
+            this.args = args;
+            return this;
+        }
+
 
         @Override
         public void run() {
@@ -161,12 +168,25 @@ public class NetworkHandler {
             logInfo(token);
 
             try {
-                if (payload == null) {
-                    httpHandler.send(endPoint, token);
+//                if (payload == null) {
+//                    httpHandler.send(endPoint, token);
+//                }
+//                else {
+//                    httpHandler.send(gson.toJson(payload), endPoint, token);
+//                }
+
+                switch (endPoint.method) {
+                    case "GET":
+                        httpHandler.sendGet(endPoint, token, args);
+                        break;
+                    case "POST":
+                        httpHandler.sendPost(endPoint, token, gson.toJson(payload));
+                        break;
+                    case "PUT":
+                        httpHandler.sendPut(endPoint, token, args);
+
                 }
-                else {
-                    httpHandler.send(gson.toJson(payload), endPoint, token);
-                }
+
                 logInfo("passed request to httpHandler.");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -345,7 +365,7 @@ public class NetworkHandler {
     public void updateDeviceStatus(Device device) {
 
         NetworkingWorker worker = new NetworkingWorker(EndPoints.devicePut);
-        worker.setPayload(device)
+        worker.setArgs(new String[] {"id", String.valueOf(device.getId()), "status", String.valueOf(device.getStatus())})
                 .setHandler(uiHandler)
                 .setHandlerMessageType(MessageType.DEVICE_UPDATE_STATUS)
                 .start();
@@ -355,7 +375,7 @@ public class NetworkHandler {
 
         NetworkingWorker worker = new NetworkingWorker(EndPoints.devicePost);
         worker.setPayload(device)
-                .retrieveDataAsObject(Device.class)
+//                .retrieveDataAsObject(int.class)
                 .setHandlerMessageType(MessageType.DEVICE_NEW)
                 .setHandler(uiHandler)
                 .start();
@@ -364,7 +384,8 @@ public class NetworkHandler {
     public void getDeviceList() {
 
         NetworkingWorker worker = new NetworkingWorker(EndPoints.deviceGet);
-        worker.retrieveDataAsObject(Device[].class)
+        worker.setArgs(new String[]{})
+                .retrieveDataAsObject(Device[].class)
                 .setHandlerMessageType(MessageType.LIST_RELOAD)
                 .setHandler(uiHandler)
                 .start();
@@ -373,7 +394,7 @@ public class NetworkHandler {
     public void login(String email, String password) {
 
         NetworkingWorker worker = new NetworkingWorker(EndPoints.userGet);
-        worker.setPayload(new CredsPair(email, password))
+        worker.setArgs(new String[] {"email", email, "password", password})
                 .retrieveDataAsString()
                 .setHandler(uiHandler)
                 .setHandlerMessageType(MessageType.LOGIN)

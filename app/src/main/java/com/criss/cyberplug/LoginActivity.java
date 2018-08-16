@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
 
             if (msg.what == MessageType.LOGIN.getValue()) {
                 if (msg.arg1 == 0) {
+                    Log.i("TOKEN", (String) payload.data);
                     preferences.setToken((String) payload.data);
                     preferences.setLoggedIn(true);
 
