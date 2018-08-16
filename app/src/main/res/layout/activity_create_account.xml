@@ -23,19 +23,18 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="29dp"
-        android:layout_marginTop="129dp"
+        android:layout_marginTop="168dp"
         android:text="What's your e-mail?"
-        android:textSize="25dp"/>
+        android:textSize="21sp" />
 
     <EditText
         android:id="@+id/for_email_edittext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@id/for_email_textview"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="161dp"
+        android:layout_alignStart="@+id/for_email_textview"
+        android:layout_marginTop="203dp"
         android:ems="10"
-        android:layout_below="@+id/for_email_textview"
         android:hint="Enter your e-mail..."
         android:inputType="textEmailAddress" />
 
@@ -43,21 +42,19 @@
         android:id="@+id/for_password_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="29dp"
-        android:layout_marginTop="233dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/for_email_textview"
+        android:layout_marginBottom="247dp"
         android:text="Create a password"
-        android:textSize="25dp"/>
+        android:textSize="21sp" />
 
     <EditText
         android:id="@+id/for_password_edittext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignStart="@id/for_password_textview"
-        android:layout_marginBottom="244dp"
-        android:layout_below="@+id/for_password_textview"
+        android:layout_alignStart="@+id/for_email_textview"
+        android:layout_marginBottom="195dp"
         android:ems="10"
         android:hint="Enter a password..."
         android:inputType="textPassword" />
@@ -70,6 +67,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="69dp"
         android:text="create"
-        android:textSize="25dp"
+        android:textSize="21dp"
         />
 </RelativeLayout>

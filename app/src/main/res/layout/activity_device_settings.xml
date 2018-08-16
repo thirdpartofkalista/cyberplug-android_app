@@ -40,7 +40,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/_dynamic"
         android:layout_marginTop="78dp"
-        android:text="Edit" />
+        android:text="Edit"
+        android:textSize="17sp"/>
 
     <EditText
         android:id="@+id/edit_edittext"
@@ -66,7 +67,8 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="261dp"
         android:layout_marginEnd="38dp"
-        android:text="add" />
+        android:text="add"
+        android:textSize="21dp"/>
 
     <TextView
         android:id="@+id/people_list_textview"
@@ -75,6 +77,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/edit_device_textview"
         android:layout_marginTop="165dp"
+        android:textSize="17sp"
         android:text="Invited people list" />
 
     <Button
@@ -94,6 +97,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="28dp"
         android:text="save"
-        android:textSize="25dp" />
+        android:textSize="21dp" />
 
 </RelativeLayout>

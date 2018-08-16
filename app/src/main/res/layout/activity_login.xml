@@ -36,7 +36,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="69dp"
         android:text="login"
-        android:textSize="25dp"/>
+        android:textSize="21dp"/>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/login_toolbar"
@@ -55,7 +55,7 @@
         android:layout_marginStart="29dp"
         android:layout_marginTop="145dp"
         android:text="E-mail"
-        android:textSize="25dp"
+        android:textSize="21sp"
         tools:layout_editor_absoluteX="85dp"
         tools:layout_editor_absoluteY="143dp" />
 
@@ -68,5 +68,5 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="245dp"
         android:layout_marginStart="29dp"
-        android:textSize="25dp"/>
+        android:textSize="21sp"/>
 </RelativeLayout>

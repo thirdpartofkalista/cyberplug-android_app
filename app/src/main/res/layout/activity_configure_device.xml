@@ -34,7 +34,7 @@
         android:layout_marginStart="29dp"
         android:layout_marginTop="115dp"
         android:text="Wi-Fi name"
-        android:textSize="25dp"/>
+        android:textSize="21sp"/>
 
     <EditText
         android:id="@+id/wifi_name_edittext"
@@ -55,7 +55,7 @@
         android:layout_marginTop="215dp"
         android:layout_marginStart="29dp"
         android:text="Wi-Fi password"
-        android:textSize="25dp"
+        android:textSize="21sp"
         />
 
     <EditText
@@ -77,7 +77,7 @@
         android:layout_marginTop="315dp"
         android:layout_marginStart="29dp"
         android:text="Device name"
-        android:textSize="25dp"/>
+        android:textSize="21sp"/>
 
     <EditText
         android:id="@+id/device_name_edittext"
@@ -97,6 +97,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="69dp"
         android:text="save"
-        android:textSize="25dp"/>
+        android:textSize="21dp"/>
 
 </RelativeLayout>

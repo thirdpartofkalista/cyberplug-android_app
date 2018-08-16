@@ -34,7 +34,7 @@
         android:layout_marginStart="23dp"
         android:layout_marginTop="125dp"
         android:text="Device Wi-Fi name"
-        android:textSize="25dp"/>
+        android:textSize="21sp"/>
 
     <EditText
         android:id="@+id/device_wifi_name_edittext"
@@ -53,8 +53,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/device_wifi_name_textview"
         android:layout_marginTop="225dp"
-        android:text="Password"
-        android:textSize="25dp" />
+        android:text="Device password"
+        android:textSize="21sp" />
 
     <EditText
         android:id="@+id/device_password_edittext"
@@ -63,7 +63,7 @@
         android:layout_alignStart="@+id/device_password_textview"
         android:layout_below="@+id/device_password_textview"
         android:ems="10"
-        android:hint="Enter a password..."
+        android:hint="Enter device password..."
         android:inputType="textPersonName" />
 
     <TextView
@@ -95,5 +95,5 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="69dp"
         android:text="next"
-        android:textSize="25dp" />
+        android:textSize="21dp" />
 </RelativeLayout>
