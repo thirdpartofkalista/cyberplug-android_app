@@ -55,11 +55,15 @@ public class CreateAccountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
 
+        networkHandler = new NetworkHandler(uiHandler, "");
+
+        preferences = new Preferences(getApplicationContext());
+
         button = findViewById(R.id.create_button);
         email = findViewById(R.id.for_email_edittext);
         password = findViewById(R.id.for_password_edittext);
 
-        Toolbar toolbar = findViewById(R.id.login_toolbar);
+        Toolbar toolbar = findViewById(R.id.create_account_toolbar);
         setSupportActionBar(toolbar);
 
         ActionBar ab = getSupportActionBar();
@@ -69,8 +73,11 @@ public class CreateAccountActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplication(), Landing.class);
-                startActivity(intent);
+                String mEmail = email.getText().toString();
+                String mPassword = password.getText().toString();
+                preferences.setEmail(mEmail);
+
+                networkHandler.createAccount(mEmail, mPassword);
             }
         });
     }

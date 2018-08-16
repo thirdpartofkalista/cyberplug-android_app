@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -68,6 +69,7 @@ public class AddDeviceActivity extends AppCompatActivity {
                 wifiManager.disconnect();
                 wifiManager.enableNetwork(netId, true);
                 wifiManager.reconnect();
+                Log.i("WIFI ", String.valueOf(netId));
 
                 Intent result = new Intent();
                 setResult(Activity.RESULT_OK, result);

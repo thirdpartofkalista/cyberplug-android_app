@@ -77,15 +77,12 @@ public class LoginActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     String mEmail = email.getText().toString();
                     String password = passField.getText().toString();
                     preferences.setEmail(mEmail);
 
-                    try {
-                        networkHandler.login(mEmail, password);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    networkHandler.login(mEmail, password);
 
                 }
             });

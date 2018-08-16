@@ -7,7 +7,7 @@
     tools:context=".CreateAccountActivity">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar2"
+        android:id="@+id/create_account_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
@@ -37,8 +37,7 @@
         android:ems="10"
         android:layout_below="@+id/for_email_textview"
         android:hint="Enter your e-mail..."
-        android:inputType="textPersonName"
-        />
+        android:inputType="textEmailAddress" />
 
     <TextView
         android:id="@+id/for_password_textview"
