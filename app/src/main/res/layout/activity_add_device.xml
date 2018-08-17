@@ -85,6 +85,8 @@
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="26dp"
         android:text="scan"
+        android:background="@drawable/buton"
+        android:textColor="@android:color/white"
         />
 
     <Button
@@ -95,5 +97,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="69dp"
         android:text="next"
-        android:textSize="21dp" />
+        android:textSize="21dp"
+        android:background="@drawable/buton"
+        android:textColor="@android:color/white"
+        />
 </RelativeLayout>

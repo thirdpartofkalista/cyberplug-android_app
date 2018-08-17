@@ -31,6 +31,8 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="118dp"
         android:text="Delete"
+        android:background="@drawable/buton"
+        android:textColor="@android:color/white"
         />
 
     <TextView
@@ -68,7 +70,9 @@
         android:layout_marginBottom="261dp"
         android:layout_marginEnd="38dp"
         android:text="add"
-        android:textSize="21dp"/>
+        android:textSize="21dp"
+        android:background="@drawable/buton"
+        android:textColor="@android:color/white"/>
 
     <TextView
         android:id="@+id/people_list_textview"
@@ -87,6 +91,8 @@
         android:layout_alignStart="@+id/edit_device_textview"
         android:layout_alignTop="@+id/delete_button"
         android:text="Reconfigure"
+        android:background="@drawable/buton"
+        android:textColor="@android:color/white"
         />
 
     <Button
@@ -97,6 +103,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="28dp"
         android:text="save"
-        android:textSize="21dp" />
+        android:textSize="21dp"
+        android:background="@drawable/buton"
+        android:textColor="@android:color/white"/>
 
 </RelativeLayout>

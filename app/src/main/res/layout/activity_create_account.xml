@@ -67,6 +67,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="69dp"
         android:text="create"
-        android:textSize="21dp"
+        android:textSize="21sp"
+        android:background="@drawable/buton"
+        android:textColor="@android:color/white"
         />
 </RelativeLayout>

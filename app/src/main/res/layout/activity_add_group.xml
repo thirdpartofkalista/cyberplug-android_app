@@ -25,7 +25,9 @@
         android:layout_centerHorizontal="true"
         android:text="Create group"
         tools:layout_editor_absoluteX="129dp"
-        tools:layout_editor_absoluteY="306dp" />
+        tools:layout_editor_absoluteY="306dp"
+        android:background="@@drawable/buton"
+        android:textColor="@android:color/white"/>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/add_group_toolbar"
