@@ -4,6 +4,7 @@ package com.criss.cyberplug;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -62,14 +63,24 @@ public class AddDeviceActivity extends AppCompatActivity {
                 }
 
                 WifiConfiguration conf = new WifiConfiguration();
-                conf.SSID = String.format("\"%s\"", mDeviceWifiName);
-                conf.preSharedKey = String.format("\"%s\"", mDeviceWifiPassword);
+//                conf.SSID = String.format("\"%s\"", mDeviceWifiName);
+//                conf.preSharedKey = String.format("\"%s\"", mDeviceWifiPassword);
+                conf.SSID = "\'" + mDeviceWifiName + "\'";
+                if (mDeviceWifiPassword != "") {
+                    conf.preSharedKey = "\'" + mDeviceWifiPassword + "\'";
+                }
 
                 int netId = wifiManager.addNetwork(conf);
                 wifiManager.disconnect();
                 wifiManager.enableNetwork(netId, true);
                 wifiManager.reconnect();
                 Log.i("WIFI ", String.valueOf(netId));
+
+                WifiInfo inf = wifiManager.getConnectionInfo();
+
+                while (inf.getNetworkId() == -1) {
+                    inf = wifiManager.getConnectionInfo();
+                }
 
                 Intent result = new Intent();
                 setResult(Activity.RESULT_OK, result);

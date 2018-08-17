@@ -2,6 +2,7 @@ package com.criss.cyberplug;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -66,11 +67,18 @@ public class ConfigureDevice extends AppCompatActivity {
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
+
+                        HttpURLConnection conn = null;
+
                         try {
 
-                            String mWifiName = URLEncoder.encode(nWifiName, "UTF-8");
-                            String mWifiPassword = URLEncoder.encode(nWifiPassword, "UTF-8");
-                            String mKey = URLEncoder.encode(key, "UTF-8");
+//                            String mWifiName = URLEncoder.encode(nWifiName, "UTF-8");
+//                            String mWifiPassword = URLEncoder.encode(nWifiPassword, "UTF-8");
+//                            String mKey = URLEncoder.encode(key, "UTF-8");
+
+                            String mWifiName = URLEncoder.encode("Around25", "UTF-8");
+                            String mWifiPassword = URLEncoder.encode("a25network", "UTF-8");
+                            String mKey = URLEncoder.encode("name@example.com", "UTF-8");
 
                             String finalUrl = deviceUrl + "?s=" +
                                     mWifiName +
@@ -83,28 +91,48 @@ public class ConfigureDevice extends AppCompatActivity {
 
                             URL url = new URL(finalUrl);
 
-                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                            conn = (HttpURLConnection) url.openConnection();
                             conn.setRequestMethod("GET");
 
                             conn.setDoOutput(false);
+                            conn.setDoInput(true);
 
                             conn.connect();
 
-                            conn.disconnect();
+                            Log.i(TAG, "Response code: " + String.valueOf(conn.getResponseCode()) + "; response message: " + String.valueOf(conn.getResponseMessage()));
+
 
                         } catch (IOException e) {
                             e.printStackTrace();
                         } finally {
-                            WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(getApplicationContext().WIFI_SERVICE);
-                            wifiManager.disconnect();
-                            wifiManager.reconnect();
 
-                            Intent intention = new Intent();
-                            intention.putExtra("name", nDeviceName);
+                            try {
+                                conn.disconnect();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            } finally {
+                                WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(getApplication().WIFI_SERVICE);
+                                if (wifiManager != null) {
+                                    wifiManager.disconnect();
+                                }
+                                if (wifiManager != null) {
+                                    wifiManager.reconnect();
+                                }
+
+                                WifiInfo inf = wifiManager.getConnectionInfo();
+
+                                while (inf.getNetworkId() == -1) {
+                                    inf = wifiManager.getConnectionInfo();
+                                }
 
 
-                            setResult(Activity.RESULT_OK, intention);
-                            finish();
+                                Intent intention = new Intent();
+                                intention.putExtra("name", nDeviceName);
+
+
+                                setResult(Activity.RESULT_OK, intention);
+                                finish();
+                            }
                         }
                     }
                 });
