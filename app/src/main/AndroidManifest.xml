@@ -9,7 +9,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <!-- Camera persmission for QR code scanning -->
-    <!-- <uses-permission android:name="android.permission.CAMERA" /> -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -36,7 +37,8 @@
         <activity android:name=".Landing" />
         <activity android:name=".CreateAccountActivity" />
         <activity android:name=".SettingsActivity" />
-        <activity android:name=".HelpActivity"></activity>
+        <activity android:name=".HelpActivity" />
+        <activity android:name=".QRcodeActivity"></activity>
     </application>
 
 </manifest>

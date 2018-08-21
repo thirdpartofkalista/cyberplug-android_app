@@ -78,16 +78,15 @@
 
     <Button
         android:id="@+id/scan_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/scan_textview"
-        android:layout_alignBaseline="@id/scan_textview"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="26dp"
-        android:text="scan"
+        android:layout_width="130dp"
+        android:layout_height="65dp"
+
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="170dp"
+        android:layout_toEndOf="@+id/device_wifi_name_edittext"
         android:background="@drawable/buton"
-        android:textColor="@android:color/white"
-        />
+        android:text="scan"
+        android:textColor="@android:color/white" />
 
     <Button
         android:id="@+id/next_button"

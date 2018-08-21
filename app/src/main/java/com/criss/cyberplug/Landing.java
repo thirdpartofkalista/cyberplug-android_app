@@ -15,6 +15,10 @@ public class Landing extends AppCompatActivity {
     Button create_account_button;
     Button log_in_button;
 
+    boolean auto_login = true;
+
+
+
     private Preferences preferences;
 
     @Override
@@ -23,7 +27,9 @@ public class Landing extends AppCompatActivity {
         setContentView(R.layout.activity_landing);
 
         preferences = new Preferences(getApplicationContext());
-
+        if (auto_login == true){
+            goToMain();
+        }
         if (preferences.isLoggedIn()) {
             goToMain();
         }

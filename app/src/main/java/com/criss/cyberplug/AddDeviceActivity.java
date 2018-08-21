@@ -52,6 +52,14 @@ public class AddDeviceActivity extends AppCompatActivity {
         final String mDeviceWifiPassword = deviceWifiPassword.getText().toString();
 
 
+        scanQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplication(), QRcodeActivity.class);
+                startActivityForResult(intent, RequestCode.SCAN_QR.getValue());
+            }
+        });
+
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -89,6 +97,18 @@ public class AddDeviceActivity extends AppCompatActivity {
         });
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RequestCode.SCAN_QR.getValue()) {
+            if (requestCode == Activity.RESULT_OK) {
+                deviceWifiName.setText(data.getStringExtra("SSID"));
+                deviceWifiPassword.setText(data.getStringExtra("PASS"));
+            }
+        }
+    }
 
     @Override
     public void onBackPressed() {

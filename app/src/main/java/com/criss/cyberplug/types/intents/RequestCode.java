@@ -8,7 +8,8 @@ public enum RequestCode {
     GROUP_SETTINGS(4),
     CONFIGURE_DEVICE(5),
     CREATE_ACCOUNT(6),
-    LOG_IN(7);
+    LOG_IN(7),
+    SCAN_QR(8);
 
     private final int value;
 
