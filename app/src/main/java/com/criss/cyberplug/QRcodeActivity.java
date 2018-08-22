@@ -13,6 +13,8 @@ import com.budiyev.android.codescanner.DecodeCallback;
 import com.criss.cyberplug.R;
 import com.google.zxing.Result;
 
+import java.util.Scanner;
+
 public class QRcodeActivity extends AppCompatActivity {
 
     private CodeScanner scanner;
@@ -30,9 +32,10 @@ public class QRcodeActivity extends AppCompatActivity {
         scanner.setDecodeCallback(new DecodeCallback() {
             @Override
             public void onDecoded(@NonNull Result result) {
+                Scanner creds = new Scanner(result.getText());
                 Intent intent = new Intent();
-                intent.putExtra("SSID", result.getText());
-                intent.putExtra("PASS", result.getText());
+                intent.putExtra("SSID", creds.nextLine());
+                intent.putExtra("PASS", creds.nextLine());
                 setResult(Activity.RESULT_OK, intent);
             }
         });
