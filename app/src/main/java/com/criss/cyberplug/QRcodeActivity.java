@@ -37,6 +37,7 @@ public class QRcodeActivity extends AppCompatActivity {
                 intent.putExtra("SSID", creds.nextLine());
                 intent.putExtra("PASS", creds.nextLine());
                 setResult(Activity.RESULT_OK, intent);
+                finish();
             }
         });
 
