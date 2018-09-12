@@ -19,15 +19,16 @@
 
     <Button
         android:id="@+id/submit1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="130dp"
+        android:layout_height="65dp"
         android:layout_below="@+id/group_name_edit_text"
         android:layout_centerHorizontal="true"
-        android:text="Create group"
-        tools:layout_editor_absoluteX="129dp"
-        tools:layout_editor_absoluteY="306dp"
+        android:layout_marginTop="72dp"
         android:background="@drawable/buton"
-        android:textColor="@android:color/white"/>
+        android:text="Create group"
+        android:textColor="@android:color/white"
+        tools:layout_editor_absoluteX="129dp"
+        tools:layout_editor_absoluteY="306dp" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/add_group_toolbar"
