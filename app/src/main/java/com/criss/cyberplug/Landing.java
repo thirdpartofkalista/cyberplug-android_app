@@ -15,7 +15,7 @@ public class Landing extends AppCompatActivity {
     Button create_account_button;
     Button log_in_button;
 
-    boolean auto_login = true;
+    boolean auto_login = false;
 
 
 
