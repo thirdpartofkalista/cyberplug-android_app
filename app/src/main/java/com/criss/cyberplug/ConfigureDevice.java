@@ -72,13 +72,13 @@ public class ConfigureDevice extends AppCompatActivity {
 
                         try {
 
-//                            String mWifiName = URLEncoder.encode(nWifiName, "UTF-8");
-//                            String mWifiPassword = URLEncoder.encode(nWifiPassword, "UTF-8");
-//                            String mKey = URLEncoder.encode(key, "UTF-8");
+                            String mWifiName = URLEncoder.encode(nWifiName, "UTF-8");
+                            String mWifiPassword = URLEncoder.encode(nWifiPassword, "UTF-8");
+                            String mKey = URLEncoder.encode(key, "UTF-8");
 
-                            String mWifiName = URLEncoder.encode("Around25", "UTF-8");
-                            String mWifiPassword = URLEncoder.encode("a25network", "UTF-8");
-                            String mKey = URLEncoder.encode("name@example.com", "UTF-8");
+//                            String mWifiName = URLEncoder.encode("Around25", "UTF-8");
+//                            String mWifiPassword = URLEncoder.encode("a25network", "UTF-8");
+//                            String mKey = URLEncoder.encode("name@example.com", "UTF-8");
 
                             String finalUrl = deviceUrl + "?s=" +
                                     mWifiName +

@@ -26,14 +26,13 @@
     <Button
         android:id="@+id/delete_button"
         android:layout_width="114dp"
-        android:layout_height="wrap_content"
+        android:layout_height="67dp"
         android:layout_alignEnd="@+id/add_people_button"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="118dp"
-        android:text="Delete"
         android:background="@drawable/buton"
-        android:textColor="@android:color/white"
-        />
+        android:text="Delete"
+        android:textColor="@android:color/white" />
 
     <TextView
         android:id="@+id/edit_device_textview"
@@ -63,8 +62,8 @@
 
     <Button
         android:id="@+id/add_people_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="114dp"
+        android:layout_height="67dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="261dp"
@@ -76,24 +75,23 @@
 
     <TextView
         android:id="@+id/people_list_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="189dp"
+        android:layout_height="67dp"
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/edit_device_textview"
         android:layout_marginTop="165dp"
-        android:textSize="17sp"
-        android:text="Invited people list" />
+        android:text="Invited people list"
+        android:textSize="17sp" />
 
     <Button
         android:id="@+id/reconfigure_device_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="114dp"
+        android:layout_height="67dp"
         android:layout_alignStart="@+id/edit_device_textview"
         android:layout_alignTop="@+id/delete_button"
-        android:text="Reconfigure"
         android:background="@drawable/buton"
-        android:textColor="@android:color/white"
-        />
+        android:text="Reconfigure"
+        android:textColor="@android:color/white" />
 
     <Button
         android:id="@+id/save_device_button"

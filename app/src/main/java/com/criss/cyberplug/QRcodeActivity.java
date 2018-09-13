@@ -38,15 +38,15 @@ public class QRcodeActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-//                        String[] creds = result.getText().split("\n");
-                        String creds = result.getText();
+                        String[] creds = result.getText().split("\n");
+//                        String creds = result.getText();
                         Intent intent = new Intent();
-//                        intent.putExtra("SSID", creds[0]);
-//                        intent.putExtra("PASS", creds[1]);
+                        intent.putExtra("SSID", creds[0]);
+                        intent.putExtra("PASS", creds[1]);
 //                        Toast.makeText(getApplicationContext(), creds[0] + " -- " + creds[1], Toast.LENGTH_LONG).show();
-                        Toast.makeText(getApplicationContext(), result.getBarcodeFormat().toString(), Toast.LENGTH_LONG).show();
-//                        setResult(Activity.RESULT_OK, intent);
-//                        finish();
+//                        Toast.makeText(getApplicationContext(), result.getBarcodeFormat().toString(), Toast.LENGTH_LONG).show();
+                        setResult(Activity.RESULT_OK, intent);
+                        finish();
                     }
                 });
             }

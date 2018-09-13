@@ -2,6 +2,9 @@ package com.criss.cyberplug;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -382,16 +385,10 @@ public class MainActivity extends AppCompatActivity {
 
             if(resultCode == Activity.RESULT_OK){
 
-//                Device device = new Device(devices.size() + 1, data.getStringExtra("name"), false, true);
-//
-//                devices.add(device);
-//
-//                networkHandler.addDevice(device);
-//
-//                updateListUi();
-                Intent mIntent = new Intent(getApplication(), ConfigureDevice.class);
-                mIntent.putExtra("key", preferences.getEmail());
-                startActivityForResult(mIntent, RequestCode.CONFIGURE_DEVICE.getValue());
+//                Intent mIntent = new Intent(getApplication(), data.getClass());
+//                mIntent.putExtra("key", preferences.getEmail());
+//                startActivityForResult(mIntent, RequestCode.CONFIGURE_DEVICE.getValue());
+                startActivityForResult(data, RequestCode.SCAN_QR.getValue());
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 makeLongToast("No device added.");
@@ -440,6 +437,41 @@ public class MainActivity extends AppCompatActivity {
                     groups.remove(data.getIntExtra("index", 0));
                     updateListUi();
                 }
+            }
+        }
+
+        if (requestCode == RequestCode.SCAN_QR.getValue()) {
+            if (resultCode == Activity.RESULT_OK) {
+                String ssid = data.getStringExtra("SSID");
+                String pass = data.getStringExtra("PASS");
+
+                WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(getApplicationContext().WIFI_SERVICE);
+
+                if (!wifiManager.isWifiEnabled()) {
+                    wifiManager.setWifiEnabled(true);
+                }
+
+                WifiConfiguration conf = new WifiConfiguration();
+                conf.SSID = "\'" + ssid + "\'";
+                if (pass != "") {
+                    conf.preSharedKey = "\'" + pass + "\'";
+                }
+
+                int netId = wifiManager.addNetwork(conf);
+                wifiManager.disconnect();
+                wifiManager.enableNetwork(netId, true);
+                wifiManager.reconnect();
+                Log.i("WIFI ", String.valueOf(netId));
+
+                WifiInfo inf = wifiManager.getConnectionInfo();
+
+                while (inf.getNetworkId() == -1) {
+                    inf = wifiManager.getConnectionInfo();
+                }
+
+                data.putExtra("key", preferences.getEmail());
+                startActivityForResult(data, RequestCode.CONFIGURE_DEVICE.getValue());
+
             }
         }
 

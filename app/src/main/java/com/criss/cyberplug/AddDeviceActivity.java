@@ -41,7 +41,6 @@ public class AddDeviceActivity extends AppCompatActivity {
         }
     };
 
-
     public void moveToConfig() {
         WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(getApplicationContext().WIFI_SERVICE);
 
@@ -69,7 +68,7 @@ public class AddDeviceActivity extends AppCompatActivity {
             inf = wifiManager.getConnectionInfo();
         }
 
-        Intent result = new Intent();
+        Intent result = new Intent(getApplicationContext(), ConfigureDevice.class);
         setResult(Activity.RESULT_OK, result);
         finish();
     }
@@ -99,7 +98,8 @@ public class AddDeviceActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplication(), QRcodeActivity.class);
-                startActivityForResult(intent, RequestCode.SCAN_QR.getValue());
+                setResult(Activity.RESULT_OK, intent);
+                finish();
             }
         });
 
@@ -138,19 +138,6 @@ public class AddDeviceActivity extends AppCompatActivity {
         nextButton.setOnClickListener(onClick);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == RequestCode.SCAN_QR.getValue()) {
-            if (resultCode == Activity.RESULT_OK) {
-                deviceWifiName.setText(data.getStringExtra("SSID"));
-                deviceWifiPassword.setText(data.getStringExtra("PASS"));
-
-                moveToConfig();
-            }
-        }
-    }
 
     @Override
     public void onBackPressed() {
