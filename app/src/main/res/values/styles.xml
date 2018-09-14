@@ -8,9 +8,18 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:fontFamily">@font/rubik</item>
     </style>
+  
+  <style name="SmartPlug.ActionBar" parent="Widget.AppCompat.Light.ActionBar">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:titleTextStyle">@style/SmartPlug.ActionBar.Text</item>
+  </style>
+  
+  <style name="SmartPlug.ActionBar.Text" parent="Widget.AppCompat.Light.ActionBar">
+       <item name="android:textColor">#ffffff</item>
+  </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@drawable/splash</item>
+        <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>
 
 </resources>

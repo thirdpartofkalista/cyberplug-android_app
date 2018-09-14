@@ -15,7 +15,6 @@
         android:ems="10"
         android:hint="Enter your e-mail..."
         android:inputType="textEmailAddress"
-
         />
 
     <EditText
@@ -48,7 +47,8 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
+        tools:layout_editor_absoluteY="0dp" 
+        android:theme="@style/Smartplug.ActionBar"/>
 
     <TextView
         android:id="@+id/email_textview"

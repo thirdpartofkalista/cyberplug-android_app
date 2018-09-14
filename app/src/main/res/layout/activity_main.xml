@@ -16,9 +16,9 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             android:elevation="4dp"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            android:theme="@style/SmartPlug.ActionBar"
             android:layout_alignParentTop="true"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"/>
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Dark" />
 
         <ListView
             android:id="@+id/main_list"
@@ -34,6 +34,7 @@
             android:layout_alignParentRight="true"
             android:layout_gravity="end|bottom"
             android:layout_margin="16dp"
+            android:src="@drawable/fab_icon"
             app:backgroundTint="?attr/colorControlActivated" />
 
     </RelativeLayout>
